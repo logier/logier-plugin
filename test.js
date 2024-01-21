@@ -1,104 +1,98 @@
-import puppeteer from "puppeteer";
-import fetch from 'node-fetch';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import plugin from "../../lib/plugins/plugin.js";
+import PluginsLoader from "../../lib/plugins/loader.js";
 
-let key = ''; //申请高德key，地址https://lbs.amap.com/dev/key/app
 
-export class TextMsg extends plugin {
+// 随机发送表情包的群号
+const groupList = ['877538147']
+
+// 群聊中接收到消息后随机发送表情概率，0-1之间，越大发送概率越大，0为不发送
+const emojirate = 1;
+
+// 随机发送表情包定义延迟的最小值和最大值
+let minDelay = 0; //最小延时，单位：秒
+let maxDelay = 0; //最大延时，单位：秒
+
+export class autoCommand extends plugin {
     constructor() {
-        super({
-            name: 'test', 
-            dsc: 'test',            
-            event: 'message',  
-            priority: 5000,   
-            rule: [
-                {
-                    reg: '^#?(test).*$',   
-                    fnc: 'test'
-                },
-            ]
-        });
+      super({
+        name: "test",
+        dsc: "test",
+        event: "message",
+        priority: -9999,
+        rule: [{
+          reg: '',
+          fnc: '推送表情包',
+        }],
+      });
     }
 
-    async test(e) {
-        const data = await filefetchData('cityadcode.jsonn');
-
-        if (!key) {
-            key = fs.readFileSync('D:\\dev\\Miao-Yunzai\\plugins\\example\\key.txt', 'utf8').trim();
-        }
-
-        logger.info(key);
-
-        // 从消息中提取中文名
-        const chineseName = e.msg.replace(/#?(test)/, '').trim();
-
-        // 如果没有输入城市名称，返回错误消息
-        if (!chineseName) {
-          logger.warn('请输入城市名称');
-          return true;
-        }
-
-        // 将中文名转换为adcode
-        const cityadcode = data[chineseName];
-
-        // 如果找到了adcode，返回它；否则，返回一个错误消息
-        if (cityadcode) {
-          logger.info('城市adcode为' + cityadcode);
+    async 推送表情包() {
+        logger.info(groupList)
+        logger.info(this.e.group_id)
+        if (groupList.includes(this.e.group_id)) {
+            logger.info('群在在白名单')
+            let command = '表情包'
+            logger.info(command)
+            let timeout = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+            logger.info(timeout)
+            await setETask(command, Number(timeout))
         } else {
-          logger.warn('找不到' + chineseName);
-          return true;
+            logger.info('群不在白名单')
         }
-
-        const weatherurl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${key}&city=${cityadcode}&extensions=all`;
-
-        // 获取天气信息
-        const response = await fetch(weatherurl);
-        const weatherData = await response.json();
-
-        // 检查是否成功获取天气信息
-        if (weatherData.status !== '1') {
-          logger.warn('无法获取天气信息');
-          return true;
-        }
-
-        // 获取第一个casts的dayweather
-        const dayweather = weatherData.forecasts[0].casts[0].dayweather;
-
-        e.reply(dayweather)
     }
+    
+
 }
 
-async function filefetchData(jsonFileName) {
-    // 获取当前文件的目录
-    const __dirname = dirname(fileURLToPath(import.meta.url));
-    // 获取 JSON 文件的绝对路径
-    const filePath = path.resolve(__dirname, `../../resources/logier/${jsonFileName}`);
-    // 获取文件路径的目录部分
-    const dirPath = path.dirname(filePath);
+async function setETask(text, timeout) {
+    let e = await getE(text)
+    return setTimeout(async function () {
+      await PluginsLoader.deal(e)
+    }, timeout * 1000)
+  }
 
-    logger.info(filePath); 
+  async function getE(text){
+    return {
+      post_type: 'message',
+      message_id: this.e.message_id,
+      user_id: this.e.user_id,
+      time: this.e.time,
+      seq: this.e.seq,
+      rand: this.e.rand,
+      font: this.e.font,
+      message_type: this.e.message_type,
+      sub_type: this.e.sub_type,
+      sender: this.e.sender,
+      from_id: this.e.from_id,
+      to_id: this.e.to_id,
+      auto_reply: this.e.auto_reply,
+      friend: this.e.friend,
+      reply: this.e.reply,
+      self_id: this.e.self_id,
+      logText: '',
+      isPrivate: this.e.isPrivate,
+      isMaster: this.e.isMaster,
+      replyNew: this.e.replyNew,
+      runtime: this.e.runtime,
+      user: this.e.user,
+      Bot: this.e.Bot || global.Bot,
 
-    // 如果路径不存在就创建文件夹
-    fs.existsSync(dirPath) || fs.mkdirSync(dirPath, { recursive: true });
-
-    let data;
-    try {
-        // 尝试读取和解析 JSON 文件
-        data = fs.existsSync(filePath) && JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    } catch (error) {
-        // 如果出现错误，删除文件以便重新下载
-        fs.unlinkSync(filePath);
+      message: [{ type: 'text', text }],
+      msg: '',
+      original_msg: text,
+      raw_message: text,
+      toString: () => { return text }
     }
+  }
 
-    if (!data) {
-        await downloadFile(`https://gitee.com/logier/emojihub/raw/main/resouces/${jsonFileName}`, filePath);
-        // 重新读取 JSON 文件
-        data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    }
 
-    return data;
-}
+
+
+
+
+
+
+
+
+
 

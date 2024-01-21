@@ -24,7 +24,7 @@ export class TextMsg extends plugin {
     }
 
     async 天气(e) {
-        const data = await filefetchData('cityadcode.jsonn');
+        const data = await filefetchData('cityadcode.json');
 
         if (!key) {
             key = fs.readFileSync('D:\\dev\\Miao-Yunzai\\plugins\\example\\key.txt', 'utf8').trim();
@@ -102,3 +102,17 @@ async function filefetchData(jsonFileName) {
     return data;
 }
 
+async function downloadFile(url, dest) {
+    const file = fs.createWriteStream(dest);
+    return new Promise((resolve, reject) => {
+      https.get(url, response => {
+        response.pipe(file);
+        file.on('finish', () => {
+          file.close(resolve);
+        });
+      }).on('error', error => {
+        fs.unlink(dest);
+        reject(error.message);
+      });
+    });
+  }
