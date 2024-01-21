@@ -39,7 +39,7 @@ const groupList = ['315239849']
  */
 
 // 是否开启定时推送
-const isAutoPush = true
+const isAutoPush = false
 
 autoyunshi()
 
@@ -67,39 +67,25 @@ export class TextMsg extends plugin {
       }
 }
 
-/**
- * 推送日历
- * @param e oicq传递的事件参数e
- */
-
-
 
 async function push今日运势(e, isAuto = 0) {
-
-  filefetchData('jrys.json').then(data => {
-    const jrys = data[Math.floor(Math.random() * data.length)];
-
-    // 随机选择一个内容
-    const item = jrys[Math.floor(Math.random() * jrys.length)];
-    logger.info(item);
-});
-
-    const cgColor = 'rgba(255, 255, 255, 0.6)';
-    const shadowc = '0px 0px 15px rgba(0, 0, 0, 0.3)';
-    const lightcg = 'brightness(100%)';
+    filefetchData('jrys.json').then(data => {
+        const item = data[Math.floor(Math.random() * data.length)];
+        logger.info(item);
+    });
 
     const imageUrl = await getRandomImage(imageUrls);
     logger.info(imageUrl);
-    
+
     let browser;
     try {
       browser = await puppeteer.launch({headless: 'new', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
       const page = await browser.newPage();
 
-      
+      let nickname = this.e.nickname ? this.e.nickname : '';
     
       let Html = `
-      <html style="background: ${cgColor}">
+      <html style="background: rgba(255, 255, 255, 0.6)">
       <head>
       <style>
       html, body {
@@ -108,23 +94,21 @@ async function push今日运势(e, isAuto = 0) {
       }        
       </style>
       </head>
-      <div class="fortune" style="width: 35%; height: 65rem; float: left; text-align: center; background: ${cgColor};">
-        <p>你的今日运势为</p>
+      <div class="fortune" style="width: 35%; height: 65rem; float: left; text-align: center; background: rgba(255, 255, 255, 0.6);">
+        <p>${nickname}你的今日运势为</p>
         <h2>${item.fortuneSummary}</h2>
         <p>${item.luckyStar}</p>
-        <div class="content" style="margin: 0 auto; padding: 12px 12px; height: 49rem; max-width: 980px; max-height: 1024px; background: ${cgColor}; border-radius: 15px; backdrop-filter: blur(3px); box-shadow: ${shadowc}; writing-mode: vertical-rl; text-orientation: mixed;">
+        <div class="content" style="margin: 0 auto; padding: 12px 12px; height: 49rem; max-width: 980px; max-height: 1024px; background: rgba(255, 255, 255, 0.6); border-radius: 15px; backdrop-filter: blur(3px); box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3); writing-mode: vertical-rl; text-orientation: mixed;">
           <p style="font-size: 25px;">${item.signText}</p>
           <p style="font-size: 25px;">${item.unsignText}</p>
         </div>
         <p>仅供娱乐| 相信科学，请勿迷信 |仅供娱乐</p>
       </div>
-      <div class="image" style="height:65rem; width: 65%; float: right; box-shadow: ${shadowc}; text-align: center;">
-        <img src=${imageUrl} style="height: 100%; filter: ${lightcg}; overflow: hidden; display: inline-block; vertical-align: middle; margin: 0; padding: 0;"/>
+      <div class="image" style="height:65rem; width: 65%; float: right; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3); text-align: center;">
+        <img src=${imageUrl} style="height: 100%; filter: brightness(100%); overflow: hidden; display: inline-block; vertical-align: middle; margin: 0; padding: 0;"/>
       </div>
     </html>
       `
-    
-    
     
       await page.setContent(Html)
     
@@ -134,9 +118,7 @@ async function push今日运势(e, isAuto = 0) {
         e.sendMsg(segment.image(`base64://${base64}`))
       } else {
         e.reply(segment.image(`base64://${base64}`))
-        
       }
-    
     } catch (error) {
       logger.error(error);
       e.reply('抱歉，生成图片时出现了错误。');
@@ -150,7 +132,10 @@ async function push今日运势(e, isAuto = 0) {
     
   }
 
-  async function getRandomImage(imageUrls) {
+
+
+
+async function getRandomImage(imageUrls) {
     let imageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
 
     // 检查imageUrl是否是一个本地文件夹
@@ -179,66 +164,66 @@ async function push今日运势(e, isAuto = 0) {
 }
 
 async function filefetchData(jsonFileName) {
-  // 获取当前文件的目录
-  const __dirname = dirname(fileURLToPath(import.meta.url));
-  // 获取 JSON 文件的绝对路径
-  const filePath = path.resolve(__dirname, `../../resources/logier/${jsonFileName}`);
-  // 获取文件路径的目录部分
-  const resourcesPath = path.resolve(__dirname, '../../resources');
+    // 获取当前文件的目录
+    const __dirname = dirname(fileURLToPath(import.meta.url));
+    // 获取 JSON 文件的绝对路径
+    const filePath = path.resolve(__dirname, `../../resources/logier/${jsonFileName}`);
+    // 获取文件路径的目录部分
+    const resourcesPath = path.resolve(__dirname, '../../resources');
 
-  // 如果路径不存在就创建文件夹
-  try {
-      await fs.promises.access(resourcesPath);
-  } catch (error) {
-      await fs.promises.mkdir(resourcesPath, { recursive: true });
-  }
+    // 如果路径不存在就创建文件夹
+    try {
+        await fs.promises.access(resourcesPath);
+    } catch (error) {
+        await fs.promises.mkdir(resourcesPath, { recursive: true });
+    }
 
-  let data;
-  let attempts = 0;
+    let data;
+    let attempts = 0;
 
-  while (!data && attempts < 3) {
-      try {
-          // 尝试读取和解析 JSON 文件
-          const fileContent = await fs.promises.readFile(filePath, 'utf8');
-          if (fileContent && fileContent.length > 0) {
-              data = JSON.parse(fileContent);
-          }
-      } catch (error) {
-          // 如果出现错误，删除文件以便重新下载
-          await fs.promises.unlink(filePath).catch(() => {});
-      }
+    while (!data && attempts < 3) {
+        try {
+            // 尝试读取和解析 JSON 文件
+            const fileContent = await fs.promises.readFile(filePath, 'utf8');
+            if (fileContent && fileContent.length > 0) {
+                data = JSON.parse(fileContent);
+            }
+        } catch (error) {
+            // 如果出现错误，删除文件以便重新下载
+            await fs.promises.unlink(filePath).catch(() => {});
+        }
 
-      if (!data) {
-          // 下载文件
-          const fileURL = `https://gitee.com/logier/logier-plugin/raw/master/resources/${jsonFileName}`;
-          const file = fs.createWriteStream(filePath);
-          await new Promise((resolve, reject) => {
-              https.get(fileURL, function(response) {
-                  response.pipe(file);
-                  file.on('finish', function() {
-                      file.close(resolve);
-                  });
-              }).on('error', function(err) {
-                  fs.unlink(filePath);
-                  reject(err.message);
-              });
-          });
+        if (!data) {
+            // 下载文件
+            const fileURL = `https://gitee.com/logier/emojihub/raw/master/resources/${jsonFileName}`;
+            const file = fs.createWriteStream(filePath);
+            await new Promise((resolve, reject) => {
+                https.get(fileURL, function(response) {
+                    response.pipe(file);
+                    file.on('finish', function() {
+                        file.close(resolve);
+                    });
+                }).on('error', function(err) {
+                    fs.unlink(filePath);
+                    reject(err.message);
+                });
+            });
 
-          // 重新读取 JSON 文件
-          const fileContent = await fs.promises.readFile(filePath, 'utf8');
-          if (fileContent && fileContent.length > 0) {
-              data = JSON.parse(fileContent);
-          }
-      }
+            // 重新读取 JSON 文件
+            const fileContent = await fs.promises.readFile(filePath, 'utf8');
+            if (fileContent && fileContent.length > 0) {
+                data = JSON.parse(fileContent);
+            }
+        }
 
-      attempts++;
-  }
+        attempts++;
+    }
 
-  return data;
+    return data;
 }
 
 
-  function autoyunshi() {
+function autoyunshi() {
     if (isAutoPush) {
       schedule.scheduleJob(time, () => {
         logger.info('[今日运势]：开始自动推送...')
