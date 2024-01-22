@@ -1,6 +1,3 @@
-import plugin from '../../lib/plugins/plugin.js'
-import common from '../../lib/common/common.js'
-import { segment } from 'oicq'
 import schedule from 'node-schedule'
 import fs from 'fs';
 import path from 'path';
@@ -14,8 +11,17 @@ let groupList = ['123456'];
 // 是否开启定时推送，默认为 false
 let isAutoPush = false;
 
-// 改成你的文件夹路径,win地址请用\\分隔,支持图片api。
-let dirs = ['/home/gallery', 'C:\\Users\\logie\\Pictures\\设定集'];
+/*图片地址，支持本地和网络
+├── emojihub
+│   ├── capoo-emoji
+│   │   ├── capoo100.gif
+│   ├── greyscale-emoji
+│   │   ├── greyscale100.gif
+可以填写/path/to/emojihub 或 /path/to/emojihub/capoo-emoji */
+let dirs = [
+  // '/home/gallery', 
+  // 'C:\\Users\\logie\\Pictures\\设定集'
+];
 
 let excludeDirs = ['不想要的文件夹1', '不想要的文件夹2'];  // 比如你填写了emojihub，但不想要下面的greyscale-emoji，就直接填入文件夹名字
 

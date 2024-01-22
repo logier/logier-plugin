@@ -6,15 +6,12 @@ import https from 'https';
 
 /*
 自定义表情包地址，支持本地和网络
-
 ├── emojihub
 │   ├── capoo-emoji
 │   │   ├── capoo100.gif
 │   ├── greyscale-emoji
 │   │   ├── greyscale100.gif
-
-可以填写/path/to/emojihub
-也可以填/path/to/emojihub/capoo-emoji
+可以填写/path/to/emojihub 或 /path/to/emojihub/capoo-emoji 
 */
 const imageUrls = [
     // 'https://t.mwm.moe/xhl',
@@ -24,7 +21,7 @@ const imageUrls = [
 
 
 // 你想要排除的表情包类别，请填写fnc的部分，别名无效
-const excludeCategories = ['龙图', '小黑子'];
+const excludeCategories = ['xxx1', 'xxx2'];
 
 // emojihub调用自定义表情包的概率，0-1之间，越大调用概率越大，0为不发送，不影响主动使用
 const customerrate = 0;
@@ -258,12 +255,13 @@ async function filefetchData(jsonFileName) {
     const filePath = path.resolve(__dirname, `../../resources/logier/${jsonFileName}`);
     // 获取文件路径的目录部分
     const resourcesPath = path.resolve(__dirname, '../../resources');
+    const logierPath = path.resolve(resourcesPath, 'logier');
 
     // 如果路径不存在就创建文件夹
     try {
-        await fs.promises.access(resourcesPath);
+        await fs.promises.access(logierPath);
     } catch (error) {
-        await fs.promises.mkdir(resourcesPath, { recursive: true });
+        await fs.promises.mkdir(logierPath, { recursive: true });
     }
 
     let data;
@@ -309,6 +307,7 @@ async function filefetchData(jsonFileName) {
 
     return data;
 }
+
 
 
 // 表情包仓库的基础URL（不用改）
