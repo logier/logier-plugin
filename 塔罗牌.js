@@ -2,7 +2,7 @@ import puppeteer from "puppeteer";
 import fetch from 'node-fetch';
 import fs from 'fs';
 
-let apikey; // 假设这是您的apikey
+let apikey = ""; // 填入gptkey 推荐https://github.com/chatanywhere/GPT_API_free?tab=readme-ov-file#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8
 
 
 
