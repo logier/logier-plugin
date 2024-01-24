@@ -58,13 +58,14 @@ TODO:群聊时收集群友表情包、戳一戳发送
 1.今日老婆
 
 <img src="screenshot/marry.png" width="70%">
-会发送一句结婚祝福语
+
 
 <br>
 
 2.进退群通知
 
 <img src="screenshot/进退群.png" width="70%">
-会发送头像以及一句抖机灵的话。
 
 
+
+QQ群：315239849
