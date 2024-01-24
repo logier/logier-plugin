@@ -88,6 +88,9 @@ async function 抽塔罗牌(e, 占卜内容) {
   let imageurl = `https://gitee.com/logier/logier-plugin/raw/master/resources/%E5%A1%94%E7%BD%97%E7%89%8C/${randomCard.type}/${randomCard.pic}.webp`;
   var options = [`正位: ${randomCard.meaning.up}`, `逆位: ${randomCard.meaning.down}`];
   var selection = options[Math.floor(Math.random() * options.length)];
+  var selectedOption = selection.split(': ');
+  var position = selectedOption[0]; // 正位 或 逆位
+  var meaning = selectedOption[1]; // 对应的含义
 
   // 检查apikey是否已输入
   if (!apikey) {
@@ -146,12 +149,12 @@ async function 抽塔罗牌(e, 占卜内容) {
       </style>
     </head>
     <div class="fortune" style="width: 35%; height: 65rem; float: left; text-align: center; background: rgba(255, 255, 255, 0.6);">
-      <h2>${randomCard.name_cn}</h2>
-      <p>${randomCard.name_en}</p>
+      <h2>${randomCard.name_cn}(${randomCard.name_en})</h2>
+      <p>${position}</p>
       <div class="content" style="margin: 0 auto; padding: 12px 12px; height: 49rem; max-width: 980px; max-height: 1024px; background: rgba(255, 255, 255, 0.6); border-radius: 15px; backdrop-filter: blur(3px); box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3); writing-mode: vertical-rl; text-orientation: mixed;">
       <p style="font-size: 25px;">${content}</p>
       </div>
-      <p>${selection}</p>
+      <p>${meaning}</p>
       <p>Create By Logier-Plugin</p>
     </div>
     <div class="image" style="height:65rem; width: 65%; float: right; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3); text-align: center;">

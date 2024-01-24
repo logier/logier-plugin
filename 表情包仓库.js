@@ -4,17 +4,16 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import https from 'https';
 
-/*
-自定义表情包地址，支持本地和网络
+/*自定义表情包地址，支持本地和网络
 ├── emojihub
 │   ├── capoo-emoji
 │   │   ├── capoo100.gif
 │   ├── greyscale-emoji
 │   │   ├── greyscale100.gif
-可以填写/path/to/emojihub 或 /path/to/emojihub/capoo-emoji 
-*/
+可以填写/path/to/emojihub 或 /path/to/emojihub/capoo-emoji */
+
 const imageUrls = [
-    // 'https://t.mwm.moe/xhl',
+    'https://t.mwm.moe/xhl',
     // '/home/Miao-Yunzai/resources/emojihub',
     // 'C:\\Users\\logie\\Pictures\\设定集'
 ];

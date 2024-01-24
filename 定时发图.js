@@ -6,7 +6,7 @@ import path from 'path';
 let time = '0 0/30 * * * ? ';
 
 // 指定定时发送的群号
-let groupList = ['123456'];
+let groupList = ['123456', ""];
 
 // 是否开启定时推送，默认为 false
 let isAutoPush = false;
@@ -18,12 +18,14 @@ let isAutoPush = false;
 │   ├── greyscale-emoji
 │   │   ├── greyscale100.gif
 可以填写/path/to/emojihub 或 /path/to/emojihub/capoo-emoji */
+
 let dirs = [
   // '/home/gallery', 
   // 'C:\\Users\\logie\\Pictures\\设定集'
 ];
 
-let excludeDirs = ['不想要的文件夹1', '不想要的文件夹2'];  // 比如你填写了emojihub，但不想要下面的greyscale-emoji，就直接填入文件夹名字
+let excludeDirs = ['不想要的文件夹1', '不想要的文件夹2'];  
+// 比如你填写了emojihub，但不想要下面的greyscale-emoji，就直接填入文件夹名字
 
 autoTask();
 

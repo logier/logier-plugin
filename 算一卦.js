@@ -8,7 +8,13 @@ const imageUrls = [
     // '/home/gallery', 
     // 添加更多的 URL或本地文件夹...
 ];
-
+/*自定义表情包地址，支持本地两级文件夹和网络图片
+├── emojihub
+│   ├── capoo-emoji
+│   │   ├── capoo100.gif
+│   ├── greyscale-emoji
+│   │   ├── greyscale100.gif
+可以填写/path/to/emojihub 或 /path/to/emojihub/capoo-emoji */
 
 export class TextMsg extends plugin {
     constructor() {

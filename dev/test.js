@@ -7,16 +7,15 @@ export class autoCommand extends plugin {
         event: "message",
         priority: 9999,
         rule: [{
-          reg: '',
+          reg: 'test',
           fnc: 'test',
         }],
       });
     }
 
     async test(e) {
-        if (this.e.user_id == 785189653) {
         logger.info(e)
-    }
+
     
 
 }

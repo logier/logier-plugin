@@ -1,63 +1,157 @@
+import schedule from 'node-schedule'
 import puppeteer from "puppeteer";
 import fs from 'fs';
 import path from 'path';
-import schedule from 'node-schedule'
 
-let key = ''; 
+/* 各位代表的意思 *-代表任意值 ？-不指定值，仅日期和星期域支持该字符。 （想了解更多，请自行搜索Cron表达式学习）
+    *  *  *  *  *  *
+    ┬  ┬  ┬  ┬  ┬  ┬
+    │  │  │  │  │  |
+    │  │  │  │  │  └ 星期几，取值：0 - 7，其中 0 和 7 都表示是周日
+    │  │  │  │  └─── 月份，取值：1 - 12
+    │  │  │  └────── 日期，取值：1 - 31
+    │  │  └───────── 时，取值：0 - 23
+    │  └──────────── 分，取值：0 - 59
+    └─────────────── 秒，取值：0 - 59（可选）
+*/
+// -------------- 摸鱼日历 --------------
+const moyutime = '0 30 9 * * ?';
+const moyugroupList = ["123456", "456789"]; 
+const moyuisAutoPush = true;
 
+// -------------- 60s新闻 --------------
+const newstime = '0 30 7 * * ?';
+const newsgroupList = ["123456", "456789"];
+const newsisAutoPush = true;
+
+// -------------- 今日天气 --------------
+const Weathertime = '0 30 8 * * ?';
+const WeathergroupList = ["123456", "456789"]; 
+const WeatherisAutoPush = true;
+let key = ''; //去这里那个key填入就行，https://dev.qweather.com/
 const imageUrls = [
   'https://t.mwm.moe/mp', 
   // '/home/gallery', 
   // 添加更多的 URL或本地文件夹...
 ];
+/*自定义表情包地址，支持本地两级文件夹和网络图片
+├── emojihub
+│   ├── capoo-emoji
+│   │   ├── capoo100.gif
+│   ├── greyscale-emoji
+│   │   ├── greyscale100.gif
+可以填写/path/to/emojihub 或 /path/to/emojihub/capoo-emoji */
 
 
-const time = '0 0/1 * * * ?';// 摸鱼日历定时发送时间，采用 Cron 表达式，当前默认为每日 9:00 分推送
-const groupList = ["877538147"]; // 摸鱼日历指定定时发送的群号
-const isAutoPush = true;// 摸鱼日历是否开启定时推送，默认为 false
+export class example extends plugin {
+  constructor() {
+    super({
+      name: '摸鱼日历和60s新闻',
+      dsc: '获取摸鱼日历和60s新闻',
+      event: 'message',
+      priority: 5000,
+      rule: [
+        {
+          reg: '^(#|/)?(摸鱼日历|摸鱼)$',
+          fnc: 'getMoyu'
+        },
+        {
+          reg: '^(#|/)?(60s日报|今日新闻)$',
+          fnc: 'getNews'
+        },
+        {
+          reg: '^#?(天气)\\s.*$',   
+          fnc: 'getWeather'
+      },
+      ]
+    });
+  }
 
-export class TextMsg extends plugin {
-    constructor() {
-        super({
-            name: '今日天气', 
-            dsc: '今日天气',            
-            event: 'message',  
-            priority: 5000,   
-            rule: [
-                {
-                    reg: '^#?(天气).*$',   
-                    fnc: '今日天气'
-                },
-            ]
-        });
+  async getMoyu(e) {
+    pushContent(e, moyuapiUrl);
+  }
+
+  async getNews(e) {
+    pushContent(e, newsimageUrl);
+  }
+
+  async getWeather(e) {
+    pushweather(e)
+  
+}
+}
+
+/**
+ * 推送内容
+ * @param e oicq传递的事件参数e
+ * @param url 图片的URL或API的URL
+ */
+async function pushContent(e, url, isAuto = 0) {
+  let msg;
+  let maxAttempts = 3;
+  for(let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      if (url === moyuapiUrl) {
+        let fetchUrl = await fetch(url).catch(err => logger.error(err));
+        let imgUrl = await fetchUrl.json();
+        url = await imgUrl.url;
+      }
+      msg = [segment.image(url, false, 120)];
+      // 如果图片获取成功，就跳出循环
+      break;
+    } catch (error) {
+      console.error(`Attempt ${attempt} failed. Retrying...`);
     }
+  }
 
-    async 今日天气(e) {
-      pushweather(e)
-    
+  // 如果尝试了最大次数后仍然失败，就记录错误并退出
+  if(!msg) {
+    console.error('Failed to get image after maximum attempts');
+    return;
+  }
+
+  // 回复消息
+  if (isAuto) {
+    e.sendMsg(msg);
+  } else {
+    e.reply(msg, true);
   }
 }
 
-autoTask();
-
-function autoTask() {
+/**
+ * 定时任务
+ */
+function autoTask(time, groupList, isAutoPush, url, taskName) {
   if (isAutoPush) {
     schedule.scheduleJob(time, () => {
-      logger.info(`[今日天气]：开始自动推送...`);
+      logger.info(`[${taskName}]：开始自动推送...`);
       for (let i = 0; i < groupList.length; i++) {
         setTimeout(() => {
           let group = Bot.pickGroup(groupList[i]);
-          pushweather(group, 1);
+          // 判断 url 是否等于 'WeatherimageUrl'
+          if (url === imageUrls) {
+            pushweather(group, 1);
+          } else {
+            pushContent(group, url, 1);
+          }
         }, i * 1000);  // 延迟 i 秒
       }
     });
   }
 }
 
+
+
+const moyuapiUrl = 'https://api.vvhan.com/api/moyu?type=json';// 摸鱼日历接口地址
+const newsimageUrl = 'http://bjb.yunwj.top/php/tp/60.jpg';// 60s新闻图片的 URL
+
+autoTask(moyutime, moyugroupList, moyuisAutoPush, moyuapiUrl, '摸鱼人日历');
+autoTask(newstime, newsgroupList, newsisAutoPush, newsimageUrl, '60s新闻');
+autoTask(Weathertime, WeathergroupList, WeatherisAutoPush, imageUrls, '今日天气');
+
+
 async function pushweather(e, isAuto = 0) {
-  if (!key) {
-    key = fs.readFileSync('D:\\dev\\Miao-Yunzai\\plugins\\example\\key.txt', 'utf8').trim();
-  }
+
   const city = e.msg.replace(/#?(天气)/, '').trim();
 
   const {location, data} = await getCityGeo(city, key)

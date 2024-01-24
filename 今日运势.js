@@ -67,7 +67,7 @@ async function push今日运势(e, isRejrys = false) {
               data.time = now;
               data.isRejrys = true;
           } else if (data.isRejrys) {
-              e.reply(['小小', segment.at(e.user_id), '竟敢不自量力，一天只可以悔签一次'], true, { recallMsg: 5 });
+              e.reply(['小小', segment.at(e.user_id), '竟敢不自量力，一天只可以悔签一次'], true);
               return;
           }
       }
@@ -133,8 +133,8 @@ async function push今日运势(e, isRejrys = false) {
         browser = await puppeteer.launch({headless: 'new', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
         const page = await browser.newPage();
         await page.setContent(Html)
-        const base64 = await page.screenshot({ encoding: "base64", fullPage: true })
-        e.reply(segment.image(`base64://${base64}`))
+        const image = await page.screenshot({fullPage: true })
+        e.reply(segment.image(image))
       } catch (error) {
         logger.info('[今日运势]：图片渲染失败，使用文本发送');
         let prefix = isRejrys ? ['异变骤生！', segment.at(e.user_id), `的${upperCaseNumbers[day]}日运势竟然变为了……\n${item.fortuneSummary}\n${item.luckyStar}\n${item.signText}\n${item.unsignText}`] : [segment.at(e.user_id), `的${upperCaseNumbers[day]}日运势为……\n${item.fortuneSummary}\n${item.luckyStar}\n${item.signText}\n${item.unsignText}`];
