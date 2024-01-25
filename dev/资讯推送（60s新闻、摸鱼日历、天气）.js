@@ -2,8 +2,6 @@ import schedule from 'node-schedule'
 import puppeteer from "puppeteer";
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 
 /* 各位代表的意思 *-代表任意值 ？-不指定值，仅日期和星期域支持该字符。 （想了解更多，请自行搜索Cron表达式学习）
     *  *  *  *  *  *
@@ -18,22 +16,22 @@ import { dirname } from 'path';
 */
 // -------------- 摸鱼日历 --------------
 const moyutime = '0 30 9 * * ?';
-const moyugroupList = ["123456", "456789"]; 
+const moyugroupList = ["315239849"]; 
 const moyuisAutoPush = true;
 
 // -------------- 60s新闻 --------------
 const newstime = '0 30 7 * * ?';
-const newsgroupList = ["123456", "456789"];
+const newsgroupList = ["315239849"];
 const newsisAutoPush = true;
 
 // -------------- 今日天气 --------------
 const Weathertime = '0 30 8 * * ?';
-const WeathergroupList = ["123456", "456789"]; 
+const WeathergroupList = ["315239849"]; 
 const WeatherisAutoPush = true;
-let key = ''; //去这里那个key填入就行，https://dev.qweather.com/
+let key = 'e6568386e67f4eb68c08c600ffc09c98'; //去这里那个key填入就行，https://dev.qweather.com/
 const imageUrls = [
-  'https://t.mwm.moe/mp', 
-  // '/home/gallery', 
+  // 'https://t.mwm.moe/mp', 
+  '/home/gallery', 
   // 添加更多的 URL或本地文件夹...
 ];
 /*自定义表情包地址，支持本地两级文件夹和网络图片
@@ -43,9 +41,6 @@ const imageUrls = [
 │   ├── greyscale-emoji
 │   │   ├── greyscale100.gif
 可以填写/path/to/emojihub 或 /path/to/emojihub/capoo-emoji */
-
-const defaultCity = "北京";// 推送天气时使用的城市，如果后续有需求就再加个分群设置吧。
-const keypath = "../resources/logier/key.json"
 
 
 export class example extends plugin {
@@ -157,28 +152,13 @@ autoTask(Weathertime, WeathergroupList, WeatherisAutoPush, imageUrls, '今日天
 
 async function pushweather(e, isAuto = 0) {
 
-  if (!key) {
-    const keyData = await filefetchData('key.json')
-    key = keyData.qweather;
-  }
-
-  if (!key) {
-    if (isAuto) {
-      e.sendMsg('天气插件未配置key，请前往https://console.qweather.com/#/apps获得');
-    } else {
-      e.reply('天气插件未配置key，请前往https://console.qweather.com/#/apps获得');
-    }
-  }
-
   const city = e.msg.replace(/#?(天气)/, '').trim();
-  
-  const cityToUse = city || defaultCity;
 
-  const {location, name} = await getCityGeo(cityToUse, key)
+  const {location, data} = await getCityGeo(city, key)
 
   const output = await getIndices(location,  key, toRoman);
 
-  const forecastresult = await getForecast(location, key, name);
+  const forecastresult = await getForecast(location, key, data);
 
   const imageUrl = await getImageUrl(getRandomImage, imageUrls);
 
@@ -316,7 +296,7 @@ async function getRandomImage(imageUrls) {
   return imageUrl;
 }
 
-async function getForecast(location, key, name) {
+async function getForecast(location, key, data) {
   const forecast = `https://devapi.qweather.com/v7/weather/3d?location=${location}&key=${key}`;
   const forecastresponse = await fetch(forecast);
   const forecastdata = await forecastresponse.json();
@@ -336,7 +316,7 @@ async function getForecast(location, key, name) {
     const humidity = item.humidity; // 获取 humidity 属性
 
     // 创建模板字符串
-    const output = `<span style="font-weight:bold; font-size=2em; line-height:150%">${fxDate}  ${name}</span>\n气温：${tempMin}°C/${tempMax}°C\n风力：${windScaleDay}/${windScaleNight}\n降水量：${precip}\n紫外线指数：${uvIndex} \n湿度：${humidity}%\n`;
+    const output = `<span style="font-weight:bold; font-size=2em; line-height:150%">${fxDate}  ${data.location[0].name}</span>\n气温：${tempMin}°C/${tempMax}°C\n风力：${windScaleDay}/${windScaleNight}\n降水量：${precip}\n紫外线指数：${uvIndex} \n湿度：${humidity}%\n`;
 
     // 将模板字符串添加到 forecastresult 数组
     forecastresult.push(output);
@@ -386,9 +366,8 @@ async function getCityGeo(city, key) {
   const cityGeoresponse = await fetch(cityGeo);
   const data = await cityGeoresponse.json();
   const location = data.location[0].id;
-  const name = data.location[0].name;
 
-  return {location, name};
+  return {location, data};
 }
 
 
@@ -403,64 +382,4 @@ function toRoman(num) {
   }
 
   return str;
-}
-
-async function filefetchData(jsonFileName) {
-  // 获取当前文件的目录
-  const __dirname = dirname(fileURLToPath(import.meta.url));
-  // 获取 JSON 文件的绝对路径
-  const filePath = path.resolve(__dirname, `../../resources/logier/${jsonFileName}`);
-  // 获取文件路径的目录部分
-  const resourcesPath = path.resolve(__dirname, '../../resources');
-  const logierPath = path.resolve(resourcesPath, 'logier');
-
-  // 如果路径不存在就创建文件夹
-  try {
-      await fs.promises.access(logierPath);
-  } catch (error) {
-      await fs.promises.mkdir(logierPath, { recursive: true });
-  }
-
-  let data;
-  let attempts = 0;
-
-  while (!data && attempts < 3) {
-      try {
-          // 尝试读取和解析 JSON 文件
-          const fileContent = await fs.promises.readFile(filePath, 'utf8');
-          if (fileContent && fileContent.length > 0) {
-              data = JSON.parse(fileContent);
-          }
-      } catch (error) {
-          // 如果出现错误，删除文件以便重新下载
-          await fs.promises.unlink(filePath).catch(() => {});
-      }
-
-      if (!data) {
-          // 下载文件
-          const fileURL = `https://gitee.com/logier/logier-plugin/raw/master/resources/${jsonFileName}`;
-          const file = fs.createWriteStream(filePath);
-          await new Promise((resolve, reject) => {
-              https.get(fileURL, function(response) {
-                  response.pipe(file);
-                  file.on('finish', function() {
-                      file.close(resolve);
-                  });
-              }).on('error', function(err) {
-                  fs.unlink(filePath);
-                  reject(err.message);
-              });
-          });
-
-          // 重新读取 JSON 文件
-          const fileContent = await fs.promises.readFile(filePath, 'utf8');
-          if (fileContent && fileContent.length > 0) {
-              data = JSON.parse(fileContent);
-          }
-      }
-
-      attempts++;
-  }
-
-  return data;
 }
