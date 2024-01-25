@@ -1,10 +1,15 @@
 import puppeteer from "puppeteer";
 import common from '../../lib/common/common.js' 
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import https from 'https';
+import fs from 'fs';
+import path from 'path';
 
-let apikey = ""; // 填入gptkey 推荐https://github.com/chatanywhere/GPT_API_free?tab=readme-ov-file#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8
+let apikey = ""; // 填入gptkey 推荐https://github.com/chatanywhere/GPT_API_free
 
-let model = "gpt-3.5-turbo";
-let gpturl = "https://api.chatanywhere.tech/v1/chat/completions";
+let model = "gpt-3.5-turbo"; // gpt模型，一般不用改
+let gpturl = "https://api.chatanywhere.tech/v1/chat/completions"; // gpt接口地址，从chatanywhere拿key不用改
 
 
 
@@ -17,7 +22,7 @@ export class TextMsg extends plugin {
             priority: 6,   // 插件优先度，数字越小优先度越高
             rule: [
                 {
-                    reg: '^#?(抽塔罗牌)\\s(.*)$',   // 正则表达式,有关正则表达式请自行百度
+                    reg: '^#?(塔罗牌|抽塔罗牌)\\s(.*)$',   // 正则表达式,有关正则表达式请自行百度
                     fnc: '塔罗牌'  // 执行方法
                 },
                 {
@@ -82,6 +87,11 @@ async 占卜内容(e) {
 }
 
 async 占卜(e) {
+
+  if (!apikey) {
+    const keyData = await filefetchData('key.json')
+    apikey = keyData.gptkey;
+  }
   let 占卜内容 = this.e.msg.replace(/^#?(占卜)/, '');
   e.reply(`正在为您占卜${占卜内容}……`)
   // 收集需要转发的消息，存入数组之内，数组内一个元素为一条消息
@@ -293,7 +303,67 @@ async function 抽塔罗牌(e, 占卜内容) {
  
 }
 
+await filefetchkey('key.json')
 
+async function filefetchkey(jsonFileName) {
+  // 获取当前文件的目录
+  const __dirname = dirname(fileURLToPath(import.meta.url));
+  // 获取 JSON 文件的绝对路径
+  const filePath = path.resolve(__dirname, `../../resources/logier/${jsonFileName}`);
+  // 获取文件路径的目录部分
+  const resourcesPath = path.resolve(__dirname, '../../resources');
+  const logierPath = path.resolve(resourcesPath, 'logier');
+
+  // 如果路径不存在就创建文件夹
+  try {
+      await fs.promises.access(logierPath);
+  } catch (error) {
+      await fs.promises.mkdir(logierPath, { recursive: true });
+  }
+
+  let data;
+  let attempts = 0;
+
+  while (!data && attempts < 3) {
+      try {
+          // 尝试读取和解析 JSON 文件
+          const fileContent = await fs.promises.readFile(filePath, 'utf8');
+          if (fileContent && fileContent.length > 0) {
+              data = JSON.parse(fileContent);
+          }
+      } catch (error) {
+          // 如果出现错误，删除文件以便重新下载
+          await fs.promises.unlink(filePath).catch(() => {});
+      }
+
+      if (!data) {
+          // 下载文件
+          const fileURL = `https://gitee.com/logier/logier-plugin/raw/master/resources/${jsonFileName}`;
+          const file = fs.createWriteStream(filePath);
+          await new Promise((resolve, reject) => {
+              https.get(fileURL, function(response) {
+                  response.pipe(file);
+                  file.on('finish', function() {
+                      file.close(resolve);
+                  });
+              }).on('error', function(err) {
+                  fs.unlink(filePath);
+                  reject(err.message);
+              });
+          });
+
+          // 重新读取 JSON 文件
+          const fileContent = await fs.promises.readFile(filePath, 'utf8');
+          if (fileContent && fileContent.length > 0) {
+              data = JSON.parse(fileContent);
+          }
+      }
+
+      attempts++;
+  }
+
+  return data;
+}
 
 
 
