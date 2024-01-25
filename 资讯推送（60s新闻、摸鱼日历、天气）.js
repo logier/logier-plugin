@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import https from 'https';
 
 /* 各位代表的意思 *-代表任意值 ？-不指定值，仅日期和星期域支持该字符。 （想了解更多，请自行搜索Cron表达式学习）
     *  *  *  *  *  *
@@ -31,6 +32,7 @@ const Weathertime = '0 30 8 * * ?';
 const WeathergroupList = ["123456", "456789"]; 
 const WeatherisAutoPush = true;
 let key = ''; //去这里那个key填入就行，https://dev.qweather.com/
+// 如果你不想在这里输入key，插件加载会自动下载../resources/logier/key.json，在qweather填入就可以
 const imageUrls = [
   'https://t.mwm.moe/mp', 
   // '/home/gallery', 
@@ -45,7 +47,6 @@ const imageUrls = [
 可以填写/path/to/emojihub 或 /path/to/emojihub/capoo-emoji */
 
 const defaultCity = "北京";// 推送天气时使用的城市，如果后续有需求就再加个分群设置吧。
-const keypath = "../resources/logier/key.json"
 
 
 export class example extends plugin {
@@ -86,6 +87,7 @@ export class example extends plugin {
 }
 }
 
+await filefetchData('key.json')
 /**
  * 推送内容
  * @param e oicq传递的事件参数e
@@ -164,9 +166,11 @@ async function pushweather(e, isAuto = 0) {
 
   if (!key) {
     if (isAuto) {
-      e.sendMsg('天气插件未配置key，请前往https://console.qweather.com/#/apps获得');
+      e.sendMsg('天气插件未配置key,请前往和风天气获得。');
+      return false
     } else {
-      e.reply('天气插件未配置key，请前往https://console.qweather.com/#/apps获得');
+      e.reply('天气插件未配置key,请前往和风天气获得。', true);
+      return false
     }
   }
 
@@ -174,7 +178,7 @@ async function pushweather(e, isAuto = 0) {
   
   const cityToUse = city || defaultCity;
 
-  const {location, name} = await getCityGeo(cityToUse, key)
+  const {location, name} = await getCityGeo(e, cityToUse, key, isAuto)
 
   const output = await getIndices(location,  key, toRoman);
 
@@ -381,10 +385,20 @@ async function getIndices(location, key, toRoman) {
   return output;
 }
 
-async function getCityGeo(city, key) {
+async function getCityGeo(e, city, key, isAuto) {
   const cityGeo = `https://geoapi.qweather.com/v2/city/lookup?location=${city}&key=${key}&city=`;
   const cityGeoresponse = await fetch(cityGeo);
   const data = await cityGeoresponse.json();
+  if (data.code !== '200') {
+      if (isAuto) {
+        e.sendMsg('未获取到城市id');
+        return false
+      } else {
+        e.reply('未获取到城市id', true);
+        return false
+      }
+  }
+
   const location = data.location[0].id;
   const name = data.location[0].name;
 

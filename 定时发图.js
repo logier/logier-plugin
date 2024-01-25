@@ -27,6 +27,8 @@ let dirs = [
 let excludeDirs = ['不想要的文件夹1', '不想要的文件夹2'];  
 // 比如你填写了emojihub，但不想要下面的greyscale-emoji，就直接填入文件夹名字
 
+let display = false;// 发送图片时是否一起发送文件夹名和文件名
+
 autoTask();
 
 export class example extends plugin {
@@ -83,7 +85,8 @@ async function push定时发图(e, isAuto = 0) {
   let pictureNameWithoutExt = path.basename(picture, path.extname(picture));
 
   // 构造消息
-  let fenlei = `分类：${folderName}\nPid：${pictureNameWithoutExt}`;
+  let fenlei = '';
+if (display) {fenlei = `${folderName}\n${pictureNameWithoutExt}`;}
 
   if (isAuto) {
     e.sendMsg([fenlei, segment.image(picture)]);

@@ -20,10 +20,9 @@ export class example extends plugin {
         })
     };
     async 今日老婆(e) {
-
         const date_time = formatDate(new Date()); 
-        const marrydata = JSON.parse(await redis.get(`Yunzai:logier-plugin:${e.group_id}_${e.user_id}_marry`));
-        const cpdata = JSON.parse(await redis.get(`Yunzai:logier-plugin:${e.group_id}_${e.user_id}_cp`));
+        let marrydata = JSON.parse(await redis.get(`Yunzai:logier-plugin:${e.group_id}_${e.user_id}_marry`));
+        let cpdata = JSON.parse(await redis.get(`Yunzai:logier-plugin:${e.group_id}_${e.user_id}_cp`));
         let [randomWife, selfMember] = await getRandomWife(e);
         
         let isSameDayMarry = marrydata && marrydata.lastmarryDate == date_time;
@@ -34,30 +33,39 @@ export class example extends plugin {
         
         let replyMessage = '';
 
+
+        let isRemarry = marrydata && marrydata.isRemarry ? marrydata.isRemarry : false;
+
+
         let imageUrl;
         let content;
         
         if (!marrydata && !cpdata || notMarryToday || notMarryToday && notCPToday) {
-            handleMarryAndCpFlag = false;
+            
+            // logger.info("1")
         } else if (isSameDayMarry) {
             replyMessage = `今天已经迎娶【${marrydata.lastmarry.nickname}】了哦~`, 
             imageUrl = `https://q1.qlogo.cn/g?b=qq&s=0&nk=${marrydata.lastmarry.user_id}`
+            // logger.info(marrydata)
         } else if (!marrydata && isSameDayCP || notMarryToday && isSameDayCP) {
             replyMessage = `今天已经被【${cpdata.lastCP.nickname}】娶走了哦~`;
             imageUrl = `https://q1.qlogo.cn/g?b=qq&s=0&nk=${cpdata.lastCP.user_id}`
+            // logger.info("3")
         } else if (!marrydata && notCPToday) {
             this.setContext('继续cp');
             replyMessage = `之前【${cpdata.lastCP.nickname}】和你组成CP了，如果想继续请回复“是的”`;
+            // logger.info("4")
         } else {
             await redis.del(`Yunzai:logier-plugin:${e.group_id}_${e.user_id}_marry`);
             await redis.del(`Yunzai:logier-plugin:${e.group_id}_${randomWife.user_id}_cp`);
-            marrydata.isRemarry = false;
         }
+
+        
         
         if (replyMessage) {
             generateFortune(e,replyMessage,content, imageUrl)
         } else {
-            handleMarryAndCP(marrydata, e, date_time, randomWife, selfMember, redis);
+            handleMarryAndCP(isRemarry, e, date_time, randomWife, selfMember, redis);
         }
         
     return true;
@@ -73,7 +81,9 @@ export class example extends plugin {
         
         
         if (!marrydata.isRemarry && isRemarry) {
-            generateFortune(e,`${randomWife.nickname}成为了你的新老婆哦~`,`解怨释结，更莫相憎；一别两宽，各生欢喜。`, `https://q1.qlogo.cn/g?b=qq&s=0&nk=${randomWife.user_id}`)
+
+            handleMarryAndCP(true, e, date_time, randomWife, selfMember, redis)
+            
         } else if (marrydata.isRemarry && isRemarry) {
             await this.e.reply(['小小', segment.at(e.user_id), '竟敢不自量力，一天只可以悔婚一次'], true);
         }
@@ -134,11 +144,11 @@ function formatDate(date) {
 
 
 
-async function handleMarryAndCP(marrydata, e, date_time, randomWife, selfMember, redis) {
+async function handleMarryAndCP(isRemarry, e, date_time, randomWife, selfMember, redis) {
     let marry = {
         lastmarryDate: date_time,
         lastmarry: randomWife,
-        isRemarry: marrydata.isRemarry,
+        isRemarry: isRemarry,
     };
     let cp = {
         lastCPDate: date_time,
