@@ -4,16 +4,7 @@
 
 云崽js插件合集
 
-<!-- PROJECT SHIELDS -->
 
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-<!-- PROJECT LOGO -->
 <br />
 
 <p align="center">
@@ -61,15 +52,8 @@
 
 1. 发送指令就回复表情包。
 2. 仓库自带龙图、七濑胡桃、atri、chiikawa、小狐狸、小黑子、狗妈、柴郡、capoo、甘城猫猫、真寻酱、阿夸、白圣女、阿尼亚等表情包。
-3. 支持自定义本地或网络表情包。
-```
-├── emojihub
-│   ├── capoo-emoji
-│   │   ├── capoo100.gif
-│   ├── greyscale-emoji
-│   │   ├── greyscale100.gif
-如果文件结构是这样的，可以填写emojihub或capoo-emoji
-```
+3. 支持自定义本地或网络表情包,本地图片支持图片文件上两级目录文件夹。
+
 
 <br>
 
