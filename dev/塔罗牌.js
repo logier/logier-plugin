@@ -1,8 +1,10 @@
 import puppeteer from "puppeteer";
 import fetch from 'node-fetch';
-import fs from 'fs';
 
-let apikey; // 假设这是您的apikey
+let apikey = ""; // 填入gptkey 推荐https://github.com/chatanywhere/GPT_API_free?tab=readme-ov-file#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8
+
+let model = "gpt-3.5-turbo";
+let gpturl = "https://api.chatanywhere.tech/v1/chat/completions";
 
 
 
@@ -78,6 +80,8 @@ async 占卜内容(e) {
 }
 
 
+
+
 async function 抽塔罗牌(e, 占卜内容) {
   let keys = Object.keys(tarot[0].cards);
   let randomIndex = Math.floor(Math.random() * keys.length);
@@ -92,11 +96,6 @@ async function 抽塔罗牌(e, 占卜内容) {
   var position = selectedOption[0]; // 正位 或 逆位
   var meaning = selectedOption[1]; // 对应的含义
 
-  // 检查apikey是否已输入
-  if (!apikey) {
-    apikey = fs.readFileSync('D:\\dev\\Miao-Yunzai\\plugins\\example\\apikey.txt', 'utf8').trim();
-}
-
   const 内容 = `我请求你担任塔罗占卜师的角色。 我想占卜的内容是${占卜内容}，我抽到的牌是${randomCard.name_cn}，并且是${selection}，请您结合我想占卜的内容来解释含义,话语尽可能简洁。`;
 
   var myHeaders = new Headers();
@@ -105,7 +104,7 @@ async function 抽塔罗牌(e, 占卜内容) {
   myHeaders.append("Content-Type", "application/json");
   
   var raw = JSON.stringify({
-     "model": "gpt-3.5-turbo",
+     "model": model,
      "messages": [
       {
           "role": "user",
@@ -123,7 +122,7 @@ async function 抽塔罗牌(e, 占卜内容) {
 
   let content;
   
-  await fetch("https://api.chatanywhere.tech/v1/chat/completions", requestOptions)
+  await fetch(gpturl, requestOptions)
     .then(response => response.json()) // 将响应解析为JSON
     .then(result => {
         content = result.choices[0].message.content; // 访问content字段
@@ -177,7 +176,6 @@ async function 抽塔罗牌(e, 占卜内容) {
  return true;
  
 }
-
 
 
 
