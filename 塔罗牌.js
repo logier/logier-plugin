@@ -6,7 +6,10 @@ import https from 'https';
 import fs from 'fs';
 import path from 'path';
 
-let apikey = ""; // 填入gptkey 推荐https://github.com/chatanywhere/GPT_API_free
+// 填入gptkey 推荐https://github.com/chatanywhere/GPT_API_free 
+// 如果不想在这里填入，也可以在../resources/logier/key.json中的gptkey部分填入
+let apikey = ""; 
+
 
 let model = "gpt-3.5-turbo"; // gpt模型，一般不用改
 let gpturl = "https://api.chatanywhere.tech/v1/chat/completions"; // gpt接口地址，从chatanywhere拿key不用改
@@ -22,7 +25,7 @@ export class TextMsg extends plugin {
             priority: 6,   // 插件优先度，数字越小优先度越高
             rule: [
                 {
-                    reg: '^#?(塔罗牌|抽塔罗牌)\\s(.*)$',   // 正则表达式,有关正则表达式请自行百度
+                    reg: '^#?(塔罗牌|抽塔罗牌)(.*)$',   // 正则表达式,有关正则表达式请自行百度
                     fnc: '塔罗牌'  // 执行方法
                 },
                 {
@@ -37,6 +40,11 @@ export class TextMsg extends plugin {
 }
 
 async 塔罗牌(e) {
+
+  if (!apikey) {
+    const keyData = await filefetchkey('key.json')
+    apikey = keyData.gptkey;
+  }
 
   let replacedMsg = this.e.msg.replace(/^#?(塔罗牌|抽塔罗牌|占卜)/, '');
 
@@ -89,7 +97,7 @@ async 占卜内容(e) {
 async 占卜(e) {
 
   if (!apikey) {
-    const keyData = await filefetchData('key.json')
+    const keyData = await filefetchkey('key.json')
     apikey = keyData.gptkey;
   }
   let 占卜内容 = this.e.msg.replace(/^#?(占卜)/, '');
@@ -134,9 +142,9 @@ async 占卜(e) {
   
       logger.info(randomCard);
   
-      let forwardmsg = `你抽到的第${i+1}张牌是\n${randomCard.name_cn} (${randomCard.name_en})\n${position === 'up' ? '正位' : '逆位'}:${randomMeanings[i]}\n${randomDescriptions[i]}`
+      let forwardmsg = [`你抽到的第${i+1}张牌是\n${randomCard.name_cn} (${randomCard.name_en})\n${position === 'up' ? '正位' : '逆位'}:  ${randomMeanings[i]}\n\n卡牌描述： ${randomDescriptions[i]}`, segment.image(imageurl)]
   
-      forward.push(forwardmsg, segment.image(imageurl))
+      forward.push(forwardmsg)
   }
   
   let translatedCardPosition = cardposition.map(position => {
