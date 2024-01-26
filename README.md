@@ -58,7 +58,7 @@
 │   │   ├── capoo100.gif
 │   ├── greyscale-emoji
 │   │   ├── greyscale100.gif
-支持jpg、jpeg、png、webp、gif
+支持webp、jpeg、webp、webp、gif
 ```
 
 <br>
@@ -78,7 +78,7 @@
 
 [我的个人博客](https://logier.gitee.io/gallery/)有很多我收集的图片api
 
-<img src="./readme-image/gallery.png" >
+<img src="./readme-image/gallery.webp" >
 
 
 
@@ -131,7 +131,7 @@
 3. 城市天气需要从和风天气获取key [如何获取key？](#如何获取key)
 4. 城市天气是图片渲染后发送，样式如下
 
-<img src="./readme-image/天气.png" alt="Logo" height="350">
+<img src="./readme-image/天气.webp" height="350">
 
 
 <br>
@@ -146,7 +146,7 @@
 
 [如何获取图片api？](#如何获取图片api)
 
-<img src="./readme-image/jrys.jpg" alt="Logo" height="350">
+<img src="./readme-image/jrys.jpg" height="350">
 
 <br>
 
@@ -157,7 +157,7 @@
 
 [如何获取图片api？](#如何获取图片api)
 
-<img src="./readme-image/算一卦.jpg" alt="Logo" height="350">
+<img src="./readme-image/算一卦.jpg" height="350">
 
 <br>
 
@@ -167,7 +167,7 @@
 
 1. 发送塔罗牌+想占卜的东西即可
 
-<img src="./readme-image/塔罗牌.jpg" alt="Logo" height="350">
+<img src="./readme-image/塔罗牌.webp" height="350">
 
 2. 支持抽三张占卜，发送 占卜+想占卜的东西 即可。
 3. 注意三牌占卜会用合并转发形式发送，部分适配器可能不支持。
@@ -184,7 +184,7 @@
 4. 离婚一天只能一次。
 5. 想用相合伞渲染，让两个人的名字在伞下两边，但找不到好的相合伞素材（
 
-<img src="./readme-image/marry.png" width="40%">
+<img src="./readme-image/marry.webp" width="40%">
 
 
 <br>
