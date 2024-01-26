@@ -47,16 +47,13 @@
 
 
 
-### 注意事项
----
+## 注意事项
 
 
  *如果出现任何bug或者想要新功能，希望及时提交issue或者qq联系我。*
 
 
- <br>
-
- #### 如何填入本地图库？
+ ### 如何填入本地图库？
 
 使用图片时，均可以使用本地或者网络图片
 本地图片支持图片文件上两级目录，也就是如果文件结构如下，可以填写emojihub或capoo-emoji
@@ -69,15 +66,14 @@
 支持webp、jpeg、webp、webp、gif
 ```
 
-<br>
 
 
-#### 如何获取key？
+### 如何获取key？
 
 塔罗牌可以前往[chatanywhere](https://github.com/chatanywhere/GPT_API_free?tab=readme-ov-file#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)免费获得。
 
 <details> <summary>还是不懂？</summary>
-<br>
+
 
 1.点击领取内测免费API Key
 
@@ -98,7 +94,7 @@
 
 还是不懂？👉[和风天气官方教程](https://dev.qweather.com/docs/configuration/project-and-key/)
 
-<br>
+
 
 插件加载后，可以在/resources/logier/key.json修改对应的key，之后就无需再在插件内填入
 <details> <summary>key.json预览</summary>
@@ -106,10 +102,9 @@
 <img src="./readme-image/keyjson.png" >
 </details>
 
-<br>
 
 
-#### 如何获取图片api？
+### 如何获取图片api？
 
 [我的个人博客](https://logier.gitee.io/gallery/)有很多我收集的图片api
 
@@ -117,14 +112,12 @@
 <img src="./readme-image/gallery.webp" >
 </details>
 
-
 <br>
 
----
+## 表情包系列
 
-### 表情包系列
 
-#### 表情包仓库
+### 表情包仓库
 
 ```
 curl -o "./plugins/example/表情包仓库.js" "https://gitee.com/logier/logier-plugin/raw/master/%E8%A1%A8%E6%83%85%E5%8C%85%E4%BB%93%E5%BA%93.js"
@@ -135,9 +128,8 @@ curl -o "./plugins/example/表情包仓库.js" "https://gitee.com/logier/logier-
 - 支持自定义本地或网络表情包。[如何填入本地图库？](#如何填入本地图库)
 
 
-<br>
 
-#### 表情包小偷
+### 表情包小偷
 
 ```
 curl -o "./plugins/example/表情包小偷.js" "https://gitee.com/logier/logier-plugin/raw/master/%E8%A1%A8%E6%83%85%E5%8C%85%E5%B0%8F%E5%81%B7.js"
@@ -147,20 +139,20 @@ curl -o "./plugins/example/表情包小偷.js" "https://gitee.com/logier/logier-
 - 群友发送消息时概率发送记录下的表情包。
 - 未经过严格及大量测试，如果有问题可以在本仓库提交issue或者去Q群联系我。
 
-<br>
 
-#### 戳一戳表情包（未做完）
+### 戳一戳表情包（未做完）
 
 - 戳一戳向gpt发送消息并回复。
 - 戳一戳回复图片接入本仓库表情包
 
 <br>
 
----
 
-### 定时系列
 
-#### 定时发图
+## 定时系列
+
+
+### 定时发图
 
 ```
 curl -o "./plugins/example/定时发图.js" "https://gitee.com/logier/logier-plugin/raw/master/%E5%AE%9A%E6%97%B6%E5%8F%91%E5%9B%BE.js"
@@ -177,9 +169,9 @@ curl -o "./plugins/example/定时发图.js" "https://gitee.com/logier/logier-plu
 <img src="./readme-image/定时发图.webp">
 </details>
 
-<br>
 
-#### 资讯推送
+
+### 资讯推送
 
 ```
 curl -o "./plugins/example/资讯推送（60s新闻、摸鱼日历、天气）.js" "https://gitee.com/logier/logier-plugin/raw/master/%E8%B5%84%E8%AE%AF%E6%8E%A8%E9%80%81%EF%BC%8860s%E6%96%B0%E9%97%BB%E3%80%81%E6%91%B8%E9%B1%BC%E6%97%A5%E5%8E%86%E3%80%81%E5%A4%A9%E6%B0%94%EF%BC%89.js"
@@ -196,12 +188,11 @@ curl -o "./plugins/example/资讯推送（60s新闻、摸鱼日历、天气）.j
 
 <br>
 
----
 
-### 运势系列
+## 运势系列
 
 
-#### 今日运势
+### 今日运势
 
 ```
 curl -o "./plugins/example/今日运势.js" "https://gitee.com/logier/logier-plugin/raw/master/%E4%BB%8A%E6%97%A5%E8%BF%90%E5%8A%BF.js"
@@ -217,9 +208,8 @@ curl -o "./plugins/example/今日运势.js" "https://gitee.com/logier/logier-plu
 <img src="./readme-image/jrys.jpg">
 </details>
 
-<br>
 
-#### 算一卦
+### 算一卦
 
 ```
 curl -o "./plugins/example/算一卦.js" "https://gitee.com/logier/logier-plugin/raw/master/%E7%AE%97%E4%B8%80%E5%8D%A6.js"
@@ -234,9 +224,9 @@ curl -o "./plugins/example/算一卦.js" "https://gitee.com/logier/logier-plugin
 <img src="./readme-image/算一卦.jpg">
 </details>
 
-<br>
 
-#### 塔罗牌
+
+### 塔罗牌
 
 ```
 curl -o "./plugins/example/塔罗牌.js" "https://gitee.com/logier/logier-plugin/raw/master/%E5%A1%94%E7%BD%97%E7%89%8C.js"
@@ -259,11 +249,11 @@ curl -o "./plugins/example/塔罗牌.js" "https://gitee.com/logier/logier-plugin
 
 <br>
 
----
 
-### 小修系列
+## 小修系列
 
-#### 今日老婆
+
+### 今日老婆
 
 ```
 curl -o "./plugins/example/今日老婆.js" "https://gitee.com/logier/logier-plugin/raw/master/%E4%BB%8A%E6%97%A5%E8%80%81%E5%A9%86.js"
@@ -279,9 +269,9 @@ curl -o "./plugins/example/今日老婆.js" "https://gitee.com/logier/logier-plu
 <img src="./readme-image/marry.webp" width="40%">
 </details>
 
-<br>
 
-#### 进退群通知
+
+### 进退群通知
 
 ```
 curl -o "./plugins/example/进退退群通知.js" "https://gitee.com/logier/logier-plugin/raw/master/%E8%BF%9B%E7%BE%A4%E9%80%80%E7%BE%A4%E9%80%9A%E7%9F%A5.jss"
@@ -297,26 +287,26 @@ curl -o "./plugins/example/进退退群通知.js" "https://gitee.com/logier/logi
 
 <br>
 
----
+## TODO
 
-### TODO
 
 1. 图片一言（maxim）重做
 2. 问候回复接入gpt
 
 <br>
 
----
 
-### 使用到的框架
+## 使用到的框架
+
 
 - [Miao-Yunzai v3](https://gitee.com/yoimiya-kokomi/Miao-Yunzai)
 - [icqq](https://github.com/icqqjs/icqq)
 - [emojihub](https://gitee.com/logier/emojihub)
 
----
+<br>
 
-### 作者
+## 作者
+
 
 logier
 
@@ -324,15 +314,17 @@ logier
 
 - 个人网站：[logier.icu](https://logier.gitee.io)
 
----
+<br>
 
-### 版权说明
+## 版权说明
+
 
 该项目签署了MIT 授权许可，详情请参阅 [LICENSE](https://github.com/logier/logier-plugin/blob/master/LICENSE)
 
----
+<br>
 
-### 鸣谢
+## 鸣谢
+
 
 - [jryspro](https://github.com/twiyin0/koishi-plugin-jryspro)
 - [一些基础插件示例~](https://gitee.com/Zyy955/Miao-Yunzai-plugin)
