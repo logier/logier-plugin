@@ -4,6 +4,11 @@
 
 云崽js插件合集
 
+<a href='https://gitee.com/logier/logier-plugin/stargazers'><img src='https://gitee.com/logier/logier-plugin/badge/star.svg?theme=white' alt='star'></img></a> 
+<a href='https://gitee.com/logier/logier-plugin/members'><img src='https://gitee.com/logier/logier-plugin/badge/fork.svg?theme=white' alt='fork'></img></a>
+<a href="https://qm.qq.com/cgi-bin/qm/qr?k=Tx0KJBxwamQ1slXC4d3ZVhSigQ9MiCmJ&jump_from=webapi&authKey=BJVVNjuciQCnetGahh3pNOirLULs1XA7fQMn/LlPWAWk5GDdr2WWB/zHim1k1OoY"><img alt="Static Badge" src="https://img.shields.io/badge/QQ群-无名战记-white">
+<a href="https://logier.gitee.io"><img alt="Static Badge" src="https://img.shields.io/badge/个人网站-white">
+
 
 <br />
 
@@ -11,6 +16,9 @@
   <a href="https://www.logier.icu/">
     <img src="./readme-image/logo.png" alt="Logo" height="100">
   </a>
+
+
+
 
  
 ## 目录
@@ -69,10 +77,17 @@
 塔罗牌可以前往[chatanywhere](https://github.com/chatanywhere/GPT_API_free?tab=readme-ov-file#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)免费获得。
 
 <details> <summary>还是不懂？</summary>
+<br>
+
 1.点击领取内测免费API Key
+
+
 <img src="./readme-image/chatanywhere.png" >
 
+<br>
+
 2.复制这一串东西填入
+
 <img src="./readme-image/apikey.png" >
 </details>
 
@@ -305,8 +320,9 @@ curl -o "./plugins/example/进退退群通知.js" "https://gitee.com/logier/logi
 
 logier
 
-qq:785189653  
-qq群:315239849
+- qq群：[315239849](https://qm.qq.com/cgi-bin/qm/qr?k=Tx0KJBxwamQ1slXC4d3ZVhSigQ9MiCmJ&jump_from=webapi&authKey=BJVVNjuciQCnetGahh3pNOirLULs1XA7fQMn/LlPWAWk5GDdr2WWB/zHim1k1OoY)
+
+- 个人网站：[logier.icu](https://logier.gitee.io)
 
 ---
 
@@ -321,7 +337,6 @@ qq群:315239849
 - [jryspro](https://github.com/twiyin0/koishi-plugin-jryspro)
 - [一些基础插件示例~](https://gitee.com/Zyy955/Miao-Yunzai-plugin)
 - [Yunzai-Bot 相关内容索引](https://gitee.com/yhArcadia/Yunzai-Bot-plugins-indexn)
-
 
 
 
