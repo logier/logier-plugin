@@ -46,6 +46,9 @@ export class TextMsg extends plugin {
 
 }
 
+await fetchsuangua('guayao.json')
+await fetchsuangua('guachi.json')
+
     async function push算一卦(e, isResuangua = false) {
 
 

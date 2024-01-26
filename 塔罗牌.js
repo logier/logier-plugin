@@ -107,7 +107,7 @@ async 占卜(e) {
   const forward = [
       "正在为您抽牌……", 
   ]
-  let keys = Object.keys(tarot[0].cards);
+  let keys = Object.keys(tarot.cards);
   let randomCards = [];
   let randomMeanings = [];
   let randomDescriptions = [];
@@ -116,13 +116,13 @@ async 占卜(e) {
   for(let i = 0; i < 3; i++) {
       let randomIndex = Math.floor(Math.random() * keys.length);
       let randomKey = keys[randomIndex];
-      let randomCard = tarot[0].cards[randomKey];
+      let randomCard = tarot.cards[randomKey];
   
       // 确保不会抽到重复的卡
       while(randomCards.includes(randomCard)) {
           randomIndex = Math.floor(Math.random() * keys.length);
           randomKey = keys[randomIndex];
-          randomCard = tarot[0].cards[randomKey];
+          randomCard = tarot.cards[randomKey];
       }
   
       randomCards.push(randomCard);
@@ -214,18 +214,24 @@ async 占卜(e) {
 
 }
 
-
+await fetchtarot('tarot.json')
 
 
 async function 抽塔罗牌(e, 占卜内容) {
 
-  let tarot = await fetchtarot('tarot.json')
+    let tarot = await fetchtarot('tarot.json')
 
-  let keys = Object.keys(tarot[0].cards);
-  let randomIndex = Math.floor(Math.random() * keys.length);
-  let randomKey = keys[randomIndex];
-  let randomCard = tarot[0].cards[randomKey];
-  logger.info(randomCard);
+    if (!tarot || !tarot.cards) {
+      logger.error('tarot or tarot.cards is undefined');
+      return;
+    }
+    
+    let keys = Object.keys(tarot.cards);
+    let randomIndex = Math.floor(Math.random() * keys.length);
+    let randomKey = keys[randomIndex];
+    let randomCard = tarot.cards[randomKey];
+    logger.info(randomCard);
+    
 
   let imageurl = `https://gitee.com/logier/logier-plugin/raw/master/resources/%E5%A1%94%E7%BD%97%E7%89%8C/${randomCard.type}/${randomCard.pic}.webp`;
   var options = [`正位: ${randomCard.meaning.up}`, `逆位: ${randomCard.meaning.down}`];

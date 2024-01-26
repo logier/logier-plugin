@@ -15,10 +15,10 @@
  
 ## 目录
 
-- [注意](#注意)
-- [如何填入本地图库？](#如何填入本地图库)
-- [如何获取key？](#如何获取key)
-- [如何获取图片api？](#如何获取图片api)
+- [注意事项](#注意事项)
+    - [如何填入本地图库？](#如何填入本地图库)
+    - [如何获取key？](#如何获取key)
+    - [如何获取图片api？](#如何获取图片api)
 - [表情包系列](#表情包系列)
     - [表情包仓库](#表情包仓库)
     - [表情包小偷](#表情包小偷)
@@ -39,16 +39,15 @@
 - [版权说明](#版权说明)
 - [鸣谢](#鸣谢)
 
-### 注意
+### 注意事项
 
- *仓库内含有大量文本，例如今日运势的抽签内容、算一卦的卦象和塔罗牌解析等，可能被标记可疑内容，可以直接在仓库内压缩下载。*
 
  *如果出现任何bug或者想要新功能，希望及时提交issue或者qq联系我。*
 
 
  <br>
 
- ### 如何填入本地图库？
+ #### 如何填入本地图库？
 
 使用图片时，均可以使用本地或者网络图片
 本地图片支持图片文件上两级目录，也就是如果文件结构如下，可以填写emojihub或capoo-emoji
@@ -63,24 +62,38 @@
 
 <br>
 
----
 
-### 如何获取key？
+#### 如何获取key？
 
-- 塔罗牌可以前往[chatanywhere](https://github.com/chatanywhere/GPT_API_free?tab=readme-ov-file#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)免费获得。
+塔罗牌可以前往[chatanywhere](https://github.com/chatanywhere/GPT_API_free?tab=readme-ov-file#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)免费获得。
 
+<details> <summary>还是不懂？</summary>
+1.点击领取内测免费API Key
+<img src="./readme-image/chatanywhere.png" >
 
+2.复制这一串东西填入
+<img src="./readme-image/apikey.png" >
+</details>
 
-- 城市天气可以前往[和风天气](https://console.qweather.com/#/apps)免费获得
-  - 还是不懂？👉[和风天气官方教程](https://dev.qweather.com/docs/configuration/project-and-key/)
+<br>
+<br>
 
-插件加载后，可以在/resources/logier/key.json修改对应的key，之后就无需再在插件内填入
+城市天气可以前往[和风天气](https://console.qweather.com/#/apps)免费获得
+
+还是不懂？👉[和风天气官方教程](https://dev.qweather.com/docs/configuration/project-and-key/)
 
 <br>
 
----
+插件加载后，可以在/resources/logier/key.json修改对应的key，之后就无需再在插件内填入
+<details> <summary>key.json预览</summary>
+将xxx替换为你的key即刻
+<img src="./readme-image/keyjson.png" >
+</details>
 
-### 如何获取图片api？
+<br>
+
+
+#### 如何获取图片api？
 
 [我的个人博客](https://logier.gitee.io/gallery/)有很多我收集的图片api
 
@@ -174,6 +187,9 @@ curl -o "./plugins/example/资讯推送（60s新闻、摸鱼日历、天气）.j
 
 #### 今日运势
 
+```
+curl -o "./plugins/example/今日运势.js" "https://gitee.com/logier/logier-plugin/raw/master/%E4%BB%8A%E6%97%A5%E8%BF%90%E5%8A%BF.js"
+```
 
 
 - 发送今日运势即可
@@ -188,6 +204,10 @@ curl -o "./plugins/example/资讯推送（60s新闻、摸鱼日历、天气）.j
 <br>
 
 #### 算一卦
+
+```
+curl -o "./plugins/example/算一卦.js" "https://gitee.com/logier/logier-plugin/raw/master/%E7%AE%97%E4%B8%80%E5%8D%A6.js"
+```
 
 - 发送算一卦即可使用
 - 一天可以悔卦一次
@@ -276,6 +296,7 @@ curl -o "./plugins/example/进退退群通知.js" "https://gitee.com/logier/logi
 
 - [Miao-Yunzai v3](https://gitee.com/yoimiya-kokomi/Miao-Yunzai)
 - [icqq](https://github.com/icqqjs/icqq)
+- [emojihub](https://gitee.com/logier/emojihub)
 
 ---
 

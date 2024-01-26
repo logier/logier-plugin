@@ -50,6 +50,8 @@ export class TextMsg extends plugin {
     }
 }
 
+await fetchjrys('jrys.json')
+
 async function push今日运势(e, isRejrys = false) {
 
   let jrys = await fetchjrys('jrys.json')

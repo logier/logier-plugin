@@ -172,9 +172,9 @@ export class TextMsg extends plugin {
         });
         return true;
     }
-  
-
 }
+
+await filefetchData('index.json')
 
 // 异步函数 sendEmoji，用于发送表情包
 async function sendEmoji(e, command) {
