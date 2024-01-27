@@ -7,8 +7,8 @@ const require = createRequire(import.meta.url);
 const crypto = require('crypto');
 
 
-let setupath = "/home/gallery/other";
-let emojipath = "/home/Miao-Yunzai/resources/logier/emoji";
+let setupath = "/home/gallery/other"; //存涩图指令保存图片的路径
+let emojipath = "/home/Miao-Yunzai/resources/logier/emoji"; //存表情指令保存图片的路径
 
 
 
@@ -27,10 +27,15 @@ export class TextMsg extends plugin {
                     permission: "master",
                 },
                 {
-                    reg: '#?(保存涩图|存涩图)$',   // 正则表达式,有关正则表达式请自行百度
-                    fnc: '保存涩图',  // 执行方法
+                    reg: '#?(保存setu|存setu)$',   // 正则表达式,有关正则表达式请自行百度
+                    fnc: '保存setu',  // 执行方法
                     permission: "master",
                 },
+                {
+                  reg: '#?(查看表情包)$',   // 正则表达式,有关正则表达式请自行百度
+                  fnc: '查看表情包',  // 执行方法
+                  permission: "master",
+              },
             ]
         })
 
@@ -46,11 +51,11 @@ export class TextMsg extends plugin {
                 downloadFile(img, emojipath)
                 .then((filePath) => {
                   console.log(`文件下载成功，保存在：${filePath}`);
-                  e.reply("保存成功", true);
+                  e.reply(`保存成功，编号为${currentId}`, true);
               })
                 .catch((err) => {
                   console.log('文件下载失败:', err);
-                  e.reply("保存失败", true);
+                  e.reply("保存失败，请再次尝试或手动保存", true);
               })
             });
         } else if(e.source) {
@@ -61,11 +66,11 @@ export class TextMsg extends plugin {
                   downloadFile(item.url, emojipath)
                   .then((filePath) => {
                     console.log(`文件下载成功，保存在：${filePath}`);
-                    e.reply("保存成功", true);
+                    e.reply(`保存成功，编号为${currentId}`, true);
                 })
                   .catch((err) => {
                     console.log('文件下载失败:', err);
-                    e.reply("保存失败", true);
+                    e.reply("保存失败，请再次尝试或手动保存", true);
                 })
                 }
               });
@@ -76,11 +81,12 @@ export class TextMsg extends plugin {
 
     async 查看表情包(e) {
 
-      logger.info(readImages(emojipath))
+      e.reply(`表情包编号：${readImages(emojipath)}`, true)
+
       return true
   }  
 
-    async 保存涩图(e) {
+    async 保存setu(e) {
 
         if(e.img) {
             e.img.forEach(img => {
@@ -88,11 +94,11 @@ export class TextMsg extends plugin {
                 downloadFile(img, setupath)
                 .then((filePath) => {
                   console.log(`文件下载成功，保存在：${filePath}`);
-                  e.reply("保存成功", true);
+                  e.reply(`保存成功，编号为${currentId}`, true);
               })
                 .catch((err) => {
                   console.log('文件下载失败:', err);
-                  e.reply("保存失败", true);
+                  e.reply("保存失败，请再次尝试或手动保存", true);
               })
             });
         } else if(e.source) {
@@ -103,11 +109,11 @@ export class TextMsg extends plugin {
                   downloadFile(item.url, setupath)
                   .then((filePath) => {
                     console.log(`文件下载成功，保存在：${filePath}`);
-                    e.reply("保存成功", true);
+                    e.reply(`保存成功，编号为${currentId}`, true);
                 })
                   .catch((err) => {
                     console.log('文件下载失败:', err);
-                    e.reply("保存失败", true);
+                    e.reply("保存失败，请再次尝试或手动保存", true);
                 })
                 }
               });
@@ -191,7 +197,6 @@ const downloadFile = (url, destDir, subDir) => {
 
 
 
-// 读取指定目录及其子目录中的所有图片文件
 const readImages = (dir) => {
   let results = [];
 
@@ -212,15 +217,42 @@ const readImages = (dir) => {
       // 检查文件扩展名是否为图片
       const ext = path.extname(file).toLowerCase();
       if (ext === '.png' || ext === '.jpg' || ext === '.jpeg' || ext === '.gif' || ext === '.webp') {
-        results.push(filePath);
+        // 获取文件名中的数字
+        const num = parseInt(path.basename(file, ext));
+        if (!isNaN(num)) {
+          results.push(num);
+        }
       }
     }
   });
 
-  return results;
+  // 对结果进行排序
+  results.sort((a, b) => a - b);
+
+  // 创建范围
+  let ranges = [];
+  for (let i = 0; i < results.length; i++) {
+    // 如果当前数字和下一个数字连续，则创建一个新的范围或扩展现有的范围
+    if (i === results.length - 1 || results[i] + 1 !== results[i + 1]) {
+      ranges.push([results[i]]);
+    } else {
+      let range = [results[i]];
+      while (i < results.length - 1 && results[i] + 1 === results[i + 1]) {
+        range.push(results[i + 1]);
+        i++;
+      }
+      ranges.push(range);
+    }
+  }
+
+  // 将范围转换为字符串
+  let strRanges = ranges.map(range => range[0] === range[range.length - 1] ? `${range[0]}` : `${range[0]}-${range[range.length - 1]}`);
+
+  return strRanges.join(', ');
 };
 
 // 使用方法：readImages('指定的目录')
+
 
 
 
