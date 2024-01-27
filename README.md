@@ -146,12 +146,16 @@ curl -o "./plugins/example/表情包小偷.js" "https://gitee.com/logier/logier-
 
 ### 保存表情包
 
+```
+curl -o "./plugins/example/保存表情包.js" "https://gitee.com/logier/logier-plugin/raw/master/%E4%BF%9D%E5%AD%98%E8%A1%A8%E6%83%85%E5%8C%85.js"
+```
+
 - 把图片保存到本地。
 - 支持指令+图片，以及指令回复带有图片的消息。
 - 支持一次保存多张图片。
-- 支持表情包和涩图分开指令和路径保存。
+- 支持表情包和setu分开指令和路径保存。
 - 支持哈希值检测，如果图片之前存过不会重复写入。
-
+- 支持查看存了多少张图片，未来也许支持指令删除对应表情包
 
 
 
