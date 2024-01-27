@@ -7,7 +7,7 @@ const require = createRequire(import.meta.url);
 const crypto = require('crypto');
 
 
-let setupath = "/home/gallery/other"; //存涩图指令保存图片的路径
+let setupath = "/home/gallery/other"; //存setu指令保存图片的路径
 let emojipath = "/home/Miao-Yunzai/resources/logier/emoji"; //存表情指令保存图片的路径
 
 
