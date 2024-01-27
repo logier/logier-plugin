@@ -4,179 +4,113 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import https from 'https';
 
-/*自定义表情包地址，支持本地和网络
+
+
+/*
+自定义表情包地址，支持本地和网络
 ├── emojihub
 │   ├── capoo-emoji
 │   │   ├── capoo100.gif
 │   ├── greyscale-emoji
 │   │   ├── greyscale100.gif
-可以填写/path/to/emojihub 或 /path/to/emojihub/capoo-emoji */
-
+支持填写emojihub文件夹
+*/
 const imageUrls = [
-    'https://t.mwm.moe/xhl',
+    // 'https://t.mwm.moe/xhl',
     // '/home/Miao-Yunzai/resources/emojihub',
     // 'C:\\Users\\logie\\Pictures\\设定集'
 ];
 
 
 // 你想要排除的表情包类别，请填写fnc的部分，别名无效
-const excludeCategories = ['xxx1', 'xxx2'];
+const excludeCategories = ['龙图', '小黑子'];
 
 // emojihub调用自定义表情包的概率，0-1之间，越大调用概率越大，0为不发送，不影响主动使用
 const customerrate = 0;
 
+// 随机发送表情包的群号
+const groupList = ['877538147']
 
+// 群聊中接收到消息后随机发送表情概率，0-1之间，越大发送概率越大，0为不发送
+const emojirate = 0;
 
-export class TextMsg extends plugin {
+// 随机发送表情包定义延迟的最小值和最大值
+let minDelay = 2; //最小延时，单位：秒
+let maxDelay = 10; //最大延时，单位：秒
+
+export class autoCommand extends plugin {
     constructor() {
-        super({
-            name: '表情包仓库', 
-            dsc: '发送表情包',            
-            event: 'message',  
-            priority: 5000,   
-            rule: [
-                {
-                    reg: '^#?(emojihub|表情包仓库|表情包)$',   
-                    fnc: 'emojihub'
-                },
-                {
-                    reg: '^#?(阿夸|aqua)(表情包)?$',   
-                    fnc: '阿夸' 
-                },
-                {
-                    reg: '^#?(阿尼亚)(表情包)?$',   
-                    fnc: '阿尼亚' 
-                },
-                {
-                    reg: '^#?(白圣女)(表情包)?$',   
-                    fnc: '白圣女' 
-                },
-                {
-                    reg: '^#?(柴郡|chaiq|Chaiq)(表情包)?$',   
-                    fnc: '柴郡' 
-                },
-                {
-                    reg: '^#?(甘城猫猫|nacho|Nacho)(表情包)?$',   
-                    fnc: '甘城猫猫' 
-                },
-                {
-                    reg: '^#?(狗妈|nana|Nana|神乐七奈)(表情包)?$',   
-                    fnc: '狗妈' 
-                },
-                {
-                    reg: '^#?(吉伊卡哇|chiikawa|Chiikawa|chikawa|Chikawa)(表情包)?$',   
-                    fnc: '吉伊卡哇' 
-                },
-                {
-                    reg: '^#?(龙图|long|Long)(表情包)?$',   
-                    fnc: '龙图' 
-                },
-                {
-                    reg: '^#?(猫猫虫咖波|猫猫虫|capoo|Capoo|咖波)(表情包)?$',   
-                    fnc: '猫猫虫咖波' 
-                },
-                {
-                    reg: '^#?(小黑子|坤图|ikun)(表情包)?$',   
-                    fnc: '小黑子' 
-                },
-                {
-                    reg: '^#?(亚托莉|亚托利|atri|ATRI)(表情包)?$',   
-                    fnc: '亚托莉' 
-                },
-                {
-                    reg: '^#?(真寻酱|绪山真寻|小真寻)(表情包)?$',   
-                    fnc: '真寻酱' 
-                },
-                {
-                    reg: '^#?(七濑胡桃|胡桃酱|Menhera|menhera)(表情包)?$',   
-                    fnc: '七濑胡桃' 
-                },
-                {
-                    reg: '^#?(小狐狸|兽耳酱|Kemomimi|kemomimi)(表情包)?$',   
-                    fnc: '小狐狸' 
-                },
-                {
-                    reg: '^#?(自定义表情包|我的表情包)$',   
-                    fnc: '自定义表情包' 
-                },
-
-            ]
-        });
+      super({
+        name: "表情包小偷",
+        dsc: "表情包小偷",
+        event: "message",
+        priority: 99999999,
+        rule: [{
+          reg: '',
+          fnc: '表情包小偷',
+        }],
+      });
     }
 
-    async emojihub(e) {
-        // 生成一个0到1之间的随机数
+    async 表情包小偷(e) {
+        if (!groupList.includes(this.e.group_id.toString())) {
+            return;
+        }
+    
+        let key = `Yunzai:emojithief:${e.group_id}_logie`;
         let random = Math.random();
     
+        this.e.message.forEach(async item => {
+            if (item.asface) {
+                let listStr = await redis.get(key);
+                let list = listStr ? JSON.parse(listStr) : [];
+                list.push(item.url);
+                if (list.length > 50) {
+                    list.shift();
+                }
+                await redis.set(key, JSON.stringify(list));
+            }
+        })
+    
         // 如果随机数大于customerrate，那么调用sendEmoji函数
-        if (random > customerrate) {
-            sendEmoji(e, 'emojihub');
+        if (random > emojirate) {
+            return;
         } 
-        // 否则，调用自定义函数
-        else {
-            sendEmoji(e, '自定义表情包');
+    
+        let listStr = await redis.get(key);
+    
+        // 如果数据库get不到listStr，那么执行以下代码
+        if (!listStr) {
+            // 生成一个在最小延时和最大延时之间的随机延时
+            let delay = Math.random() * (maxDelay - minDelay) + minDelay;
+    
+            // 决定要发送的表情包类型
+            let emojiType = random > customerrate ? 'emojihub' : '自定义表情包';
+
+            // 设置延时后发送表情包
+            setTimeout(() => {
+                sendEmoji(e, emojiType);
+            }, delay * 1000);
+
+            return true;
         }
+    
+        let list = JSON.parse(listStr);
+        let randomIndex = Math.floor(Math.random() * list.length);
+        let imageurl = list[randomIndex];
+    
+        let delay = Math.random() * (maxDelay - minDelay) + minDelay; //生成一个在最小延时和最大延时之间的随机延时
+        setTimeout(() => {
+            e.reply([segment.image(imageurl)]);
+        }, delay *1000);
+    
         return true;
     }
     
-    async 阿夸(e) {
-        sendEmoji(e, '阿夸')
-    }
-    async 阿尼亚(e) {
-        sendEmoji(e, '阿尼亚')
-    }
-    async 白圣女(e) {
-        sendEmoji(e, '白圣女')
-    }
-    async 柴郡(e) {
-        sendEmoji(e, '柴郡')
-    }
-    async 狗妈(e) {
-        sendEmoji(e, '狗妈')
-    }
-    async 甘城猫猫(e) {
-        sendEmoji(e, '甘城猫猫')
-    }
-    async 吉伊卡哇(e) {
-        sendEmoji(e, '吉伊卡哇')
-    }
-    async 龙图(e) {
-        sendEmoji(e, '龙图')
-    }
-    async 猫猫虫咖波(e) {
-        sendEmoji(e, '猫猫虫咖波')
-    }
-    async 小黑子(e) {
-        sendEmoji(e, '小黑子')
-    }
-    async 亚托莉(e) {
-        sendEmoji(e, '亚托莉')
-    }
-    async 真寻酱(e) {
-        sendEmoji(e, '真寻酱')
-    }
-    async 七濑胡桃(e) {
-        sendEmoji(e, '七濑胡桃')
-    }
-    async 小狐狸(e) {
-        sendEmoji(e, '小狐狸')
-    }
-    async 自定义表情包(e) {
-        if (!imageUrls || imageUrls.length === 0) {
-            logger.warn('[表情包仓库]自定义表情包为空');
-            return false;
-        }
-        getRandomImage(imageUrls).then(imageUrl => {
-            logger.info('[表情包仓库]自定义表情包图片地址：' + imageUrl);  // 打印选中的图片URL
-            e.reply([segment.image(imageUrl)]);
-        });
-        return true;
-    }
+    
+    
 }
 
-await filefetchData('index.json')
-
-// 异步函数 sendEmoji，用于发送表情包
 async function sendEmoji(e, command) {
     try {
         if (command === '自定义表情包') {
@@ -217,7 +151,6 @@ async function sendEmoji(e, command) {
 }
 
 
-
 async function getRandomImage(imageUrls) {
     let imageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
 
@@ -247,6 +180,7 @@ async function getRandomImage(imageUrls) {
 }
 
 
+
 async function filefetchData(jsonFileName) {
     // 获取当前文件的目录
     const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -254,13 +188,12 @@ async function filefetchData(jsonFileName) {
     const filePath = path.resolve(__dirname, `../../resources/logier/${jsonFileName}`);
     // 获取文件路径的目录部分
     const resourcesPath = path.resolve(__dirname, '../../resources');
-    const logierPath = path.resolve(resourcesPath, 'logier');
 
     // 如果路径不存在就创建文件夹
     try {
-        await fs.promises.access(logierPath);
+        await fs.promises.access(resourcesPath);
     } catch (error) {
-        await fs.promises.mkdir(logierPath, { recursive: true });
+        await fs.promises.mkdir(resourcesPath, { recursive: true });
     }
 
     let data;
@@ -308,33 +241,5 @@ async function filefetchData(jsonFileName) {
 }
 
 
-
 // 表情包仓库的基础URL（不用改）
 const baseURL = 'https://gitee.com/logier/emojihub/raw/master/';
-
-
-
-
-
-
-
-
-
-
-    
-    
-    
-    
-    
-  
-    
-
-    
-
-
-
-    
-    
-
-
-

@@ -43,7 +43,7 @@
     - [进退群通知](#进退群通知)
 - [TODO](#TODO)
 
- <br>
+<br>
 
 
 
@@ -53,7 +53,7 @@
  *如果出现任何bug或者想要新功能，希望及时提交issue或者qq联系我。*
 
 
- ### 如何填入本地图库？
+### 如何填入本地图库？
 
 使用图片时，均可以使用本地或者网络图片
 本地图片支持图片文件上两级目录，也就是如果文件结构如下，可以填写emojihub或capoo-emoji
@@ -66,7 +66,7 @@
 支持webp、jpeg、webp、webp、gif
 ```
 
-
+<br>
 
 ### 如何获取key？
 
@@ -94,13 +94,15 @@
 
 还是不懂？👉[和风天气官方教程](https://dev.qweather.com/docs/configuration/project-and-key/)
 
-
+<br>
 
 插件加载后，可以在/resources/logier/key.json修改对应的key，之后就无需再在插件内填入
 <details> <summary>key.json预览</summary>
 将xxx替换为你的key即刻
 <img src="./readme-image/keyjson.png" >
 </details>
+
+<br>
 
 
 
@@ -127,7 +129,7 @@ curl -o "./plugins/example/表情包仓库.js" "https://gitee.com/logier/logier-
 - 仓库自带龙图、七濑胡桃、atri、chiikawa、小狐狸、小黑子、狗妈、柴郡、capoo、甘城猫猫、真寻酱、阿夸、白圣女、阿尼亚等表情包。
 - 支持自定义本地或网络表情包。[如何填入本地图库？](#如何填入本地图库)
 
-
+<br>
 
 ### 表情包小偷
 
@@ -139,6 +141,7 @@ curl -o "./plugins/example/表情包小偷.js" "https://gitee.com/logier/logier-
 - 群友发送消息时概率发送记录下的表情包。
 - 未经过严格及大量测试，如果有问题可以在本仓库提交issue或者去Q群联系我。
 
+<br>
 
 ### 戳一戳表情包（未做完）
 
@@ -169,7 +172,7 @@ curl -o "./plugins/example/定时发图.js" "https://gitee.com/logier/logier-plu
 <img src="./readme-image/定时发图.webp">
 </details>
 
-
+<br>
 
 ### 资讯推送
 
@@ -191,7 +194,6 @@ curl -o "./plugins/example/资讯推送（60s新闻、摸鱼日历、天气）.j
 
 ## 运势系列
 
-
 ### 今日运势
 
 ```
@@ -208,6 +210,7 @@ curl -o "./plugins/example/今日运势.js" "https://gitee.com/logier/logier-plu
 <img src="./readme-image/jrys.jpg">
 </details>
 
+<br>
 
 ### 算一卦
 
@@ -224,7 +227,7 @@ curl -o "./plugins/example/算一卦.js" "https://gitee.com/logier/logier-plugin
 <img src="./readme-image/算一卦.jpg">
 </details>
 
-
+<br>
 
 ### 塔罗牌
 
@@ -249,9 +252,17 @@ curl -o "./plugins/example/塔罗牌.js" "https://gitee.com/logier/logier-plugin
 
 <br>
 
+### 今日签到
+
+- 请使用横图图源
+- 竖图适配也许做，也许不做。
+
+<details> <summary>签到预览</summary>
+<img src="./readme-image/签到.jpg" >
+</details>
+
 
 ## 小修系列
-
 
 ### 今日老婆
 
@@ -269,7 +280,7 @@ curl -o "./plugins/example/今日老婆.js" "https://gitee.com/logier/logier-plu
 <img src="./readme-image/marry.webp" width="40%">
 </details>
 
-
+<br>
 
 ### 进退群通知
 
@@ -293,7 +304,6 @@ curl -o "./plugins/example/进退退群通知.js" "https://gitee.com/logier/logi
 1. 图片一言（maxim）重做
 2. 问候回复接入gpt
 
-<br>
 
 
 ## 使用到的框架
@@ -303,7 +313,6 @@ curl -o "./plugins/example/进退退群通知.js" "https://gitee.com/logier/logi
 - [icqq](https://github.com/icqqjs/icqq)
 - [emojihub](https://gitee.com/logier/emojihub)
 
-<br>
 
 ## 作者
 
@@ -314,14 +323,13 @@ logier
 
 - 个人网站：[logier.icu](https://logier.gitee.io)
 
-<br>
+
 
 ## 版权说明
 
 
 该项目签署了MIT 授权许可，详情请参阅 [LICENSE](https://github.com/logier/logier-plugin/blob/master/LICENSE)
 
-<br>
 
 ## 鸣谢
 
