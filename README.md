@@ -254,7 +254,11 @@ curl -o "./plugins/example/塔罗牌.js" "https://gitee.com/logier/logier-plugin
 
 ### 今日签到
 
-- 请使用横图图源
+```
+curl -o "./plugins/example/今日签到.js" "https://gitee.com/logier/logier-plugin/raw/master/%E4%BB%8A%E6%97%A5%E7%AD%BE%E5%88%B0.js"
+```
+
+- 请使用横图图源 [如何获取图片api？](#如何获取图片api)
 - 竖图适配也许做，也许不做。
 
 <details> <summary>签到预览</summary>
