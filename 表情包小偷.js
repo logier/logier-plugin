@@ -54,7 +54,7 @@ export class autoCommand extends plugin {
 
     async 表情包小偷(e) {
         if (!groupList.includes(this.e.group_id.toString())) {
-            return;
+            return false;
         }
     
         let key = `Yunzai:emojithief:${e.group_id}_logie`;
@@ -74,7 +74,7 @@ export class autoCommand extends plugin {
     
         // 如果随机数大于customerrate，那么调用sendEmoji函数
         if (random > emojirate) {
-            return;
+            return false;
         } 
     
         let listStr = await redis.get(key);

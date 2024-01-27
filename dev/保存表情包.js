@@ -36,6 +36,11 @@ export class TextMsg extends plugin {
                   fnc: '查看表情包',  // 执行方法
                   permission: "master",
               },
+              {
+                reg: '#?(删除表情包).*$',   // 正则表达式,有关正则表达式请自行百度
+                fnc: '删除表情包',  // 执行方法
+                permission: "master",
+            },
             ]
         })
 
@@ -80,14 +85,18 @@ export class TextMsg extends plugin {
     }  
 
     async 查看表情包(e) {
-
       e.reply(`表情包编号：${readImages(emojipath)}`, true)
-
       return true
   }  
 
-    async 保存setu(e) {
+  async 删除表情包(e) {
+    let 编号 = this.e.msg.replace(/^#?(删除表情包)/, '');
+    deleteImage(emojipath, 编号)
+    e.reply(`删除成功`, true)
+    return true
+}  
 
+    async 保存setu(e) {
         if(e.img) {
             e.img.forEach(img => {
                 logger.info(img);
@@ -254,6 +263,36 @@ const readImages = (dir) => {
 // 使用方法：readImages('指定的目录')
 
 
+const deleteImage = (dir, id) => {
+  // 读取目录中的所有文件和文件夹
+  const list = fs.readdirSync(dir);
+
+  list.forEach((file) => {
+    // 获取文件的完整路径
+    const filePath = path.join(dir, file);
+
+    // 获取文件的信息
+    const stat = fs.statSync(filePath);
+
+    // 如果是目录，则递归删除
+    if (stat && stat.isDirectory()) {
+      deleteImage(filePath, id);
+    } else {
+      // 检查文件扩展名是否为图片
+      const ext = path.extname(file).toLowerCase();
+      if (ext === '.png' || ext === '.jpg' || ext === '.jpeg' || ext === '.gif' || ext === '.webp') {
+        // 获取文件名中的数字
+        const num = parseInt(path.basename(file, ext));
+        if (!isNaN(num) && num === id) {
+          fs.unlinkSync(filePath);
+          console.log(`Deleted file: ${filePath}`);
+        }
+      }
+    }
+  });
+};
+
+// 使用方法：deleteImage('指定的目录', 编号)
 
 
 
