@@ -92,7 +92,7 @@ export class autoCommand extends plugin {
                 sendEmoji(e, emojiType);
             }, delay * 1000);
 
-            return true;
+            return false;
         }
     
         let list = JSON.parse(listStr);
@@ -104,7 +104,7 @@ export class autoCommand extends plugin {
             e.reply([segment.image(imageurl)]);
         }, delay *1000);
     
-        return true;
+        return false;
     }
     
     
@@ -117,7 +117,7 @@ async function sendEmoji(e, command) {
             const imageUrl = await getRandomImage(imageUrls);
             logger.info(`[表情包仓库]自定义表情包地址：${imageUrl}`);  // 打印选中的图片URL
             e.reply([segment.image(imageUrl)]);
-            return true;
+            return false;
         }
         
         const data = await filefetchData('index.json')
@@ -147,7 +147,7 @@ async function sendEmoji(e, command) {
         logger.error(`[表情包仓库]${error}`);
     }
 
-    return true;
+    return false;
 }
 
 
