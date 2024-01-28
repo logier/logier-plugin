@@ -19,23 +19,23 @@ import https from 'https';
 */
 // -------------- 摸鱼日历 --------------
 const moyutime = '0 30 9 * * ?';
-const moyugroupList = ["123456", "456789"]; 
-const moyuisAutoPush = false;
+const moyugroupList = ["315239849"]; 
+const moyuisAutoPush = true;
 
 // -------------- 60s新闻 --------------
 const newstime = '0 30 7 * * ?';
-const newsgroupList = ["123456", "456789"];
-const newsisAutoPush = false;
+const newsgroupList = ["315239849"];
+const newsisAutoPush = true;
 
 // -------------- 今日天气 --------------
 const Weathertime = '0 30 8 * * ?';
-const WeathergroupList = ["123456", "456789"]; 
-const WeatherisAutoPush = false;
+const WeathergroupList = ["315239849"]; 
+const WeatherisAutoPush = true;
 let key = ''; //去这里那个key填入就行，https://dev.qweather.com/
 // 如果你不想在这里输入key，插件加载会自动下载../resources/logier/key.json，在qweather填入就可以
 const imageUrls = [
-  'https://t.mwm.moe/mp', 
-  // '/home/gallery', 
+  // 'https://t.mwm.moe/mp', 
+  '/home/gallery', 
   // 添加更多的 URL或本地文件夹...
 ];
 /*自定义表情包地址，支持本地两级文件夹和网络图片
@@ -46,7 +46,8 @@ const imageUrls = [
 │   │   ├── greyscale100.gif
 可以填写/path/to/emojihub 或 /path/to/emojihub/capoo-emoji */
 
-const defaultCity = "北京";// 推送天气时使用的城市，如果后续有需求就再加个分群设置吧。
+const defaultCity = "广州";// 推送天气时使用的城市，如果后续有需求就再加个分群设置吧。
+
 
 
 export class example extends plugin {
@@ -176,6 +177,7 @@ async function pushweather(e, isAuto = 0) {
 
   const city = (e?.msg ?? '').replace(/#?(天气)/, '').trim();
   const cityToUse = city || defaultCity;
+  
 
   const {location, name} = await getCityGeo(e, cityToUse, key, isAuto)
 

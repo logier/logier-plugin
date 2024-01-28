@@ -27,8 +27,8 @@ export class TextMsg extends plugin {
                     permission: "master",
                 },
                 {
-                    reg: '#?(保存setu|存setu)$',   // 正则表达式,有关正则表达式请自行百度
-                    fnc: '保存setu',  // 执行方法
+                    reg: '#?(保存涩图|存涩图)$',   // 正则表达式,有关正则表达式请自行百度
+                    fnc: '保存涩图',  // 执行方法
                     permission: "master",
                 },
                 {
@@ -96,7 +96,7 @@ export class TextMsg extends plugin {
     return true
 }  
 
-    async 保存setu(e) {
+    async 保存涩图(e) {
         if(e.img) {
             e.img.forEach(img => {
                 logger.info(img);

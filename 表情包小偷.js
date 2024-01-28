@@ -18,7 +18,7 @@ import https from 'https';
 const imageUrls = [
     // 'https://t.mwm.moe/xhl',
     // '/home/Miao-Yunzai/resources/emojihub',
-    // 'C:\\Users\\logie\\Pictures\\设定集'
+    '/home/Miao-Yunzai/resources/logier/emoji'
 ];
 
 
@@ -26,13 +26,13 @@ const imageUrls = [
 const excludeCategories = ['龙图', '小黑子'];
 
 // emojihub调用自定义表情包的概率，0-1之间，越大调用概率越大，0为不发送，不影响主动使用
-const customerrate = 0;
+const customerrate = 0.1;
 
 // 随机发送表情包的群号
-const groupList = ['877538147']
+const groupList = ['315239849']
 
 // 群聊中接收到消息后随机发送表情概率，0-1之间，越大发送概率越大，0为不发送
-const emojirate = 0;
+const emojirate = 0.05;
 
 // 随机发送表情包定义延迟的最小值和最大值
 let minDelay = 2; //最小延时，单位：秒
