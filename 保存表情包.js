@@ -10,7 +10,7 @@ const crypto = require('crypto');
 let setupath = "/home/gallery/other"; //存setu指令保存图片的路径
 let emojipath = "/home/Miao-Yunzai/resources/logier/emoji"; //存表情指令保存图片的路径
 
-
+//因为gitee的内容管制，请自行ctrl+H 全部替换“setu”为你想要的指令
 
 // TextMsg可自行更改，其他照旧即可。
 export class TextMsg extends plugin {
@@ -36,6 +36,11 @@ export class TextMsg extends plugin {
                   fnc: '查看表情包',  // 执行方法
                   permission: "master",
               },
+              {
+                reg: '#?(查看setu)$',   // 正则表达式,有关正则表达式请自行百度
+                fnc: '查看setu',  // 执行方法
+                permission: "master",
+            },
             ]
         })
 
@@ -84,7 +89,14 @@ export class TextMsg extends plugin {
       e.reply(`表情包编号：${readImages(emojipath)}`, true)
 
       return true
-  }  
+  } 
+  
+  async 查看setu(e) {
+
+    e.reply(`setu编号：${readImages(setupath)}`, true)
+
+    return true
+}  
 
     async 保存setu(e) {
 

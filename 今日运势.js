@@ -74,7 +74,7 @@ async function push今日运势(e, isRejrys = false) {
               data.item = newJrys[Math.floor(Math.random() * newJrys.length)];
               data.time = now;
               data.isRejrys = true;
-          } else if (data.isRejrys) {
+          } else if (data.isRejrys && lastUpdated == data.time) {
               e.reply(['小小', segment.at(e.user_id), '竟敢不自量力，一天只可以悔签一次'], true);
               return;
           }
