@@ -34,7 +34,7 @@ const WeatherisAutoPush = false;
 let key = ''; //去这里那个key填入就行，https://dev.qweather.com/
 // 如果你不想在这里输入key，插件加载会自动下载../resources/logier/key.json，在qweather填入就可以
 const imageUrls = [
-  'https://t.mwm.moe/mp', 
+  'https://t.mwm.moe/pc', 
   // '/home/gallery', 
   // 添加更多的 URL或本地文件夹...
 ];
@@ -219,10 +219,10 @@ async function pushweather(e, isAuto = 0) {
            justify-content: space-between;
            border-radius:10px 10px 10px 10px;
            border:1px solid #a1a1a1;
-           background: rgba(255, 255, 255, 0.5);
+           background: rgba(255, 255, 255, 0.1);
            z-index:1;
            position:absolute;
-           backdrop-filter: blur(80px);
+           backdrop-filter: blur(20px);
          }
          p {
            color : rgba(0,0,0, 0.6);
@@ -241,6 +241,7 @@ async function pushweather(e, isAuto = 0) {
          .tu{
           float: left;
            border:1px solid #00000;
+           max-width: 1024px
          }
          img{
             border:1px solid #00000;

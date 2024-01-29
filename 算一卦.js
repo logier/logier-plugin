@@ -145,13 +145,13 @@ await fetchsuangua('guachi.json')
              padding: 2px; 
              word-wrap: break-word;
              white-space: pre-wrap;
-             text-align: center; 
+             text-align: left; 
            }
            .centered-content {
              display: flex;
              flex-direction: column;
              justify-content: flex-start;
-             align-items: center;
+
              height: 100%;
            }
            .tu{
@@ -174,7 +174,7 @@ await fetchsuangua('guachi.json')
               <br>
                <p>${content}</p>
                <br>
-               <p style="text-shadow:3px 3px 2px rgba(-20,-10,4,.3);">${guayao[randomIndex]}</p>
+               <p style="text-shadow:3px 3px 2px rgba(-20,-10,4,.3); ">${guayao[randomIndex]}</p>
                <p>${guachi[randomIndex]}</p>
              </div>
              <br>
