@@ -27,35 +27,35 @@ export class TextMsg extends plugin {
             priority: 6,   // 插件优先度，数字越小优先度越高
             rule: [            
                 {
-                    reg: '^#?人间$',
+                    reg: '^(#|/)?人间$',
                     fnc: '人间'
                 },
                 {
-                    reg: '^#?毒鸡汤$',
+                    reg: '^(#|/)?毒鸡汤$',
                     fnc: '毒鸡汤'
                 },
                 {
-                    reg: '^#?舔狗日记$',
+                    reg: '^(#|/)?舔狗日记$',
                     fnc: '舔狗日记'
                 },
                 {
-                    reg: '^#?社会语录$',
+                    reg: '^(#|/)?社会语录$',
                     fnc: '社会语录'
                 },
                 {
-                    reg: '^#?骚话$',
+                    reg: '^(#|/)?骚话$',
                     fnc: '骚话'
                 },
                 {
-                    reg: '^#?发病$',
+                    reg: '^(#|/)?发病$',
                     fnc: '发病'
                 },
                 {
-                    reg: '^#?烧脑$',
+                    reg: '^(#|/)?烧脑$',
                     fnc: '烧脑'
                 },
                 {
-                    reg: '^#?kfc$',
+                    reg: '^(#|/)?kfc$',
                     fnc: 'kfc'
                 },
                 {
@@ -276,38 +276,31 @@ async function generateHtml(e, content, source, html_style, img_style, quote_sty
         
         
         let Html = `
-        <html>
-        <head>
-        <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-        }        
-        </style>
-        </head>
-        <img src="${imageUrl}" style="position: absolute; z-index: -1;" />
-        <div style="backdrop-filter: blur(10px);">
-            <div class="fortune" style="width: 30%; height: 65rem; float: left;align-items:center;display:flex !important;">
-                <div class="content" style="margin: 0 auto; background: rgba(0, 0, 0, 0.6); border-radius: 15px; backdrop-filter: blur(3px); box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.3); writing-mode: vertical-lr; text-orientation: mixed; color: white;min-height: 40%">
-                    <div style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
-                        <p style="font-weight: bold;font-size: 1.5em; margin-bottom: auto;letter-spacing: 5px;">『${content} 』</p>
-                        <p style="font-style: italic; margin-top: auto; margin-bottom: 2%; font-size: 1em;">————${source}</p>
-                    </div>            
+        <html style="width: 1280px; height: 800px;">
+        <img src="${imageUrl}" style="position: absolute; width: 100%; height: 100%; object-fit: cover; z-index: -1; backdrop-filter: blur(10px);" />
+        <div style="width:100%;height:100%;flex-direction:row-reverse;display:flex !important; backdrop-filter: blur(10px);">
+            <div style="height:100%;width:50%;align-items:center;display:flex !important;justify-content:center;">
+                <img src="${imageUrl}" style="max-height:95%;max-width:95%;box-shadow:5px 5px 5px 5px rgba(0, 0, 0, 0.13); border: 5px solid rgba(0, 0, 0, 0.5);"> 
+            </div> 
+            <div style="width:50%;height:100%;justify-content:center;display:flex !important;align-items:center;"> 
+                <div style="height:30%;width:30%;border:rgba(233, 231, 239, 1) solid 2px;border-radius:20px 20px 20px 20px;box-shadow:0px 0px 15px rgba(0, 0, 0, 0.3);background-color:rgba(255, 255, 255, 0.6);max-width:90%;max-height:90%;flex-direction:column;justify-content:center;display:flex !important;line-height:3em;width:80%;"> 
+                    <span style="font-size:1.5em;font-weight:bold;line-height:auto;text-align:left;padding:0 0 0 1%;text-indent:-5px;">『 ${content} 』</span>
+                    <span style="font-size:1.5em;text-align:right;font-style:italic;font-weight:lighter;padding:0 2% 0 0;">——${source}</span>
                 </div>
             </div>
-            <div style="height:100%;width:70%;align-items:center;display:flex !important;justify-content:center;">
-                <img src="${imageUrl}" style="max-height:95%;max-width:95%;box-shadow:5px 5px 5px 5px rgba(0, 0, 0, 0.8);"> 
-            </div> 
-        </div> 
-        </html>            
+        </div>
+        </html>   
         `;
-        
+
+        // 设置页面内容
         await page.setContent(Html);
 
         // 对整个页面进行截图
-        const base64 = await page.screenshot({ encoding: "base64", fullPage: true })
-        
+        const base64 = await page.screenshot({ encoding: "base64", fullPage: true });
+
         e.reply(segment.image(`base64://${base64}`))
+
+
         return true
 
     } catch (error) {
