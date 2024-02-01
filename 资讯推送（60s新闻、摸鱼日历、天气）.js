@@ -222,7 +222,7 @@ async function pushweather(e, isAuto = 0) {
            background: rgba(255, 255, 255, 0.1);
            z-index:1;
            position:absolute;
-           backdrop-filter: blur(20px);
+           backdrop-filter: blur(5px);
          }
          p {
            color : rgba(0,0,0, 0.6);

@@ -1,17 +1,11 @@
 import puppeteer from "puppeteer";
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import https from 'https';
 
-const imageUrls = [
-    // 'D:\\Edgedownload\\pixiv'
-    //'https://t.mwm.moe/mp', //横图
-    "https://t.mwm.moe/pc"
-    // '/home/gallery',
-    // 添加更多的 URL或本地文件夹...
-];
+import { readAndParseJSON, readAndParseYAML, getRandomUrl, numToChinese, getRandomImage, getImageUrl } from '../utils/getdate.js'
+
+
+const Config = await readAndParseYAML('../config/config.yml');
 
 // TextMsg可自行更改，其他照旧即可。
 export class TextMsg extends plugin {
@@ -34,19 +28,18 @@ export class TextMsg extends plugin {
   // 执行方法1
   async 签到(e) {
 
-    let now = new Date();
-   let datatime =  now.toLocaleDateString('zh-CN'); //日期格式
+  let now = new Date();
+  let datatime =  now.toLocaleDateString('zh-CN'); //日期格式
 
-   const response = await fetch('https://v1.hitokoto.cn');
-   const hitokodata = await response.json();
-    const content = hitokodata.hitokoto;
+  const response = await fetch('https://v1.hitokoto.cn');
+  const hitokodata = await response.json();
+  const content = hitokodata.hitokoto;
 
-
-    let imageUrl = await getRandomImage(imageUrls); 
-    if (path.isAbsolute(imageUrl)) {
-      let imageBuffer = await fs.readFileSync(imageUrl);
-      let base64Image = imageBuffer.toString('base64');
-      imageUrl = 'data:image/png;base64,' + base64Image
+  let imageUrl;
+  if (Config.signSwitch) {
+      imageUrl = await getRandomImage();
+  } else {
+      imageUrl = await getImageUrl(Config.imageUrls);
   }
 
   let data = JSON.parse(await redis.get(`Yunzai:logier-plugin:${e.user_id}_sign`));
@@ -335,14 +328,6 @@ export class TextMsg extends plugin {
       .rereturn((list) => (call_back) => list.forEach(call_back));
   </script>
   <script>
-  /****
-   * $的用法：
-   * $(接收一个参数，和你css里的选择器是一样的)(接收一个回调函数，回调函数的参数是接收到的元素，每一个元素都会被回调函数处理一遍)
-   * 例子：
-   * $("h")((h)=>{h.innerText="你好"})
-   * 实际上就是让所有h元素的innerText都等于你好
-   */
-
   $(".bgimg")((img) => {
     img.src = "${imageUrl}"; //图片url,建议使用base64
   });
@@ -350,15 +335,9 @@ export class TextMsg extends plugin {
 </script>
           `;
  
-
-
-
     let browser;
-
- 
-
     try {
-      const imageUrl = await getRandomImage(imageUrls);
+      const imageUrl = await getImageUrl(Config.imageUrls);
       if (!imageUrl) {
         throw new Error('无法获取图片URL');
       }
@@ -380,41 +359,9 @@ export class TextMsg extends plugin {
 
 }
 
-
-
 }
 
 
-
-
-async function getRandomImage(imageUrls) {
-    let imageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
-
-    // 检查imageUrl是否是一个本地文件夹
-    if (fs.existsSync(imageUrl) && fs.lstatSync(imageUrl).isDirectory()) {
-        // 获取文件夹中的所有文件
-        let files = fs.readdirSync(imageUrl);
-
-        // 过滤出图片文件
-        let imageFiles = files.filter(file => ['.jpg', '.png', '.gif', '.jpeg', '.webp'].includes(path.extname(file)));
-
-        // 如果文件夹中有图片文件，随机选择一个
-        if (imageFiles.length > 0) {
-            let imageFile = imageFiles[Math.floor(Math.random() * imageFiles.length)];
-            imageUrl = path.join(imageUrl, imageFile);
-        } else {
-            // 如果文件夹中没有图片文件，随机选择一个子文件夹
-            let subdirectories = files.filter(file => fs.lstatSync(path.join(imageUrl, file)).isDirectory());
-            if (subdirectories.length > 0) {
-                let subdirectory = subdirectories[Math.floor(Math.random() * subdirectories.length)];
-                imageUrl = await getRandomImage([path.join(imageUrl, subdirectory)]);
-                
-            }
-        }
-    }
-
-    return imageUrl;
-}
 
 
 
