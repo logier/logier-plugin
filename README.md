@@ -10,16 +10,17 @@
 <a href="https://logier.gitee.io"><img alt="Static Badge" src="https://img.shields.io/badge/个人网站-white">
 
 
-<br />
+<br>
 
 <p align="center">
   <a href="https://www.logier.icu/">
     <img src="./readme-image/logo.png" alt="Logo" height="100">
   </a>
 
+ <img src="https://count.getloli.com/get/@:logier?theme=moebooru-h" alt=":logier" />
+<br>
 
-
-
+# 本仓库js插件已合并成[鸢尾花插件](https://gitee.com/logier/logier-plugins)
  
 ## 目录
 
